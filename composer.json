@@ -1,0 +1,23 @@
+{
+    "name": "tigron/skeleton-database",
+    "description": "Tigron Skeleton object traits",
+    "type": "library",
+    "require": {
+		"skeleton-database": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tigron BVBA",
+            "email": "support@tigron.be"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/tigron/skeleton-object",
+        "issues": "https://github.com/tigron/skeleton-object/issues"
+    },
+    "autoload": {
+        "psr-4": { "Skeleton\\Object\\": "lib/Skeleton/Object/" }
+    }
+
+}
