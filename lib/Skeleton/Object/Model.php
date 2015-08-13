@@ -318,7 +318,7 @@ trait Model {
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_table'])) {
 			return self::$class_configuration['database_table'];
 		} else {
-			return strtolower(get_class());
+			return strtolower((new \ReflectionClass(get_class()))->getShortName());
 		}
 	}
 
