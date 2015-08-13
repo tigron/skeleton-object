@@ -2,8 +2,8 @@
     "name": "tigron/skeleton-object",
     "description": "Tigron Skeleton object traits",
     "type": "library",
-    "require": {
-		"skeleton-database": "*"
+    "require-dev": {
+		"tigron/skeleton-database": "dev-master",
     },
     "license": "MIT",
     "authors": [
