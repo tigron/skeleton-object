@@ -1,5 +1,5 @@
 {
-    "name": "tigron/skeleton-database",
+    "name": "tigron/skeleton-object",
     "description": "Tigron Skeleton object traits",
     "type": "library",
     "require": {
