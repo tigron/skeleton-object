@@ -329,9 +329,9 @@ trait Model {
 	 * @return array $tables
 	 */
 	private static function trait_get_link_tables() {
-		$db = Database::Get();
+		$db = $this->trait_get_database();
 		$table = self::trait_get_database_table();
-		$fields = Util::mysql_get_table_fields($table);
+		$fields = $db->get_columns($table);
 		$tables = $db->getCol('SHOW tables');
 
 		$joins = [];
