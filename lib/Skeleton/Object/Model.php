@@ -73,14 +73,14 @@ trait Model {
 		$table = self::trait_get_database_table();
 
 		if (!isset($this->id) OR $this->id === null) {
-			throw new Exception('Could not fetch ' . $table . ' data: id not set');
+			throw new \Exception('Could not fetch ' . $table . ' data: id not set');
 		}
 
 		$db = self::trait_get_database();
 		$details = $db->get_row('SELECT * FROM ' . $db->quote_identifier($table) . ' WHERE id=?', [$this->id]);
 
 		if ($details === null) {
-			throw new Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
+			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
 
 		$this->details = $details;
@@ -99,10 +99,10 @@ trait Model {
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['disallow_set'])) {
 			if (is_array(self::$class_configuration['disallow_set'])) {
 				if (in_array($key, self::$class_configuration['disallow_set'])) {
-					throw new Exception('Can not set ' . $key . ' directly');
+					throw new \Exception('Can not set ' . $key . ' directly');
 				}
 			} else {
-				throw new Exception('Improper use of disallow_set');
+				throw new \Exception('Improper use of disallow_set');
 			}
 		}
 
@@ -145,7 +145,7 @@ trait Model {
 		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
 
 		if (!in_array($label, self::$object_text_fields)) {
-			throw new Exception('Incorrect text field:' . $label);
+			throw new \Exception('Incorrect text field:' . $label);
 		}
 
 		if (!isset($this->object_text_cache[$key])) {
@@ -169,7 +169,7 @@ trait Model {
 		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
 
 		if (!in_array($label, self::$object_text_fields)) {
-			throw new Exception('Incorrect text field:' . $label);
+			throw new \Exception('Incorrect text field:' . $label);
 		}
 
 		if ($this->id === null) {
@@ -206,7 +206,7 @@ trait Model {
 			}
 		}
 
-		throw new Exception('Unknown key requested: ' . $key);
+		throw new \Exception('Unknown key requested: ' . $key);
 	}
 
 	/**
