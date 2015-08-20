@@ -323,7 +323,7 @@ trait Model {
 	 * @return array $tables
 	 */
 	private static function trait_get_link_tables() {
-		$db = $this->trait_get_database();
+		$db = self::trait_get_database();
 		$table = self::trait_get_database_table();
 		$fields = $db->get_columns($table);
 		$tables = $db->get_column('SHOW tables');
