@@ -326,7 +326,7 @@ trait Model {
 		$db = $this->trait_get_database();
 		$table = self::trait_get_database_table();
 		$fields = $db->get_columns($table);
-		$tables = $db->getCol('SHOW tables');
+		$tables = $db->get_column('SHOW tables');
 
 		$joins = [];
 		foreach ($fields as $field) {

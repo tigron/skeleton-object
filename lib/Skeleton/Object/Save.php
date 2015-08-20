@@ -57,7 +57,7 @@ trait Save {
 
 		if (!isset($this->id) OR $this->id === null) {
 			$db->insert($table, $this->details);
-			$this->id = $db->getOne('SELECT LAST_INSERT_ID();');
+			$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
 		} else {
 			$where = 'id=' . $db->quote($this->id);
 			$db->update($table, $this->details, $where);
