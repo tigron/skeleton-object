@@ -39,7 +39,7 @@ trait Delete {
 			$this->deleted = '0000-00-00 00:00:00';
 			$this->save();
 		} else {
-			throw new Exception('This object cannot be restored');
+			throw new \Exception('This object cannot be restored');
 		}
 	}
 }

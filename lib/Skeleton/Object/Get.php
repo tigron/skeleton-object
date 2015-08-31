@@ -28,7 +28,7 @@ trait Get {
 	 */
 	public static function get_by_id($id) {
 		if ($id === null) {
-			throw new Exception('Can not fetch ' . get_class() . ' with id null');
+			throw new \Exception('Can not fetch ' . get_class() . ' with id null');
 		}
 
 		return new self($id);
