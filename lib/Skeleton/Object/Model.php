@@ -178,7 +178,7 @@ trait Model {
 
 		if (!isset($this->object_text_cache[$key])) {
 			$language = \Skeleton\I18n\Language::get_by_name_short($language);
-			$this->object_text_cache[$key] = Object_Text::get_by_object_label_language($this, $label, $language)->content;
+			$this->object_text_cache[$key] = Text::get_by_object_label_language($this, $label, $language)->content;
 		}
 
 		return $this->object_text_cache[$key];

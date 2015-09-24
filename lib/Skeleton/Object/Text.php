@@ -121,7 +121,7 @@ class Text {
 			}
 		}
 
-		$object_text = new Object_Text();
+		$object_text = new self();
 		$object_text->id = $data['id'];
 		$object_text->details = $data;
 
@@ -140,7 +140,7 @@ class Text {
 		$ids = $db->getCol('SELECT id FROM object_text WHERE classname=?', array($classname));
 		$object_texts = array();
 		foreach ($ids as $id) {
-			$object_texts[] = Object_Text::get_by_id($id);
+			$object_texts[] = self::get_by_id($id);
 		}
 		return $object_texts;
 	}
