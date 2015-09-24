@@ -20,7 +20,7 @@ trait Delete {
 		$db = self::trait_get_database();
 
 		if (isset(self::$object_text_fields)) {
-			$object_texts = Object_Text::get_by_object($this);
+			$object_texts = Text::get_by_object($this);
 			foreach ($object_texts as $object_text) {
 				$object_text->delete();
 			}

@@ -50,7 +50,7 @@ trait Slug {
 				$slug_exist = true;
 			}
 
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$slug_exist = false;
 		}
 
@@ -70,12 +70,11 @@ trait Slug {
 	 */
 	public static function get_by_slug($slug) {
 		$table = self::trait_get_database_table();
-		$fields = Util::mysql_get_table_fields($table);
-		$db = Database::Get();
+		$db = self::trait_get_database();
 
 		$id = $db->get_one('SELECT id FROM ' . $db->quote_identifier($table) . ' WHERE slug=?', [$slug]);
 		if ($id === null) {
-			throw new Exception('Object not found');
+			throw new \Exception('Object not found');
 		}
 		return self::get_by_id($id);
 	}
