@@ -42,4 +42,4 @@ When using the Slug trait, it is possible to auto update the slug when saving th
     /**
      * Set the auto update slug flag
      */
-    \Skeleton\Object\Config::$auto_update_slug = 'true';
+    \Skeleton\Object\Config::$auto_update_slug = true;
