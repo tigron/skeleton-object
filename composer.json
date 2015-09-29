@@ -3,7 +3,8 @@
     "description": "Tigron Skeleton object traits",
     "type": "library",
     "require-dev": {
-		"tigron/skeleton-database": "dev-master"
+		"tigron/skeleton-database": "dev-master",
+		"cocur/slugify": "dev-master"
     },
     "license": "MIT",
     "authors": [

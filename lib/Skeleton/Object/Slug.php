@@ -9,6 +9,9 @@
 
 namespace Skeleton\Object;
 
+use Cocur\Slugify\Slugify;
+use Tigron\Skeleton\I18n\Language;
+
 trait Slug {
 
 	/**
@@ -27,13 +30,8 @@ trait Slug {
 			throw new Exception('No base found to generate slug');
 		}
 
-		$slug = strtolower($name);
-		$slug = mb_convert_encoding($slug, 'ISO-8859-1', 'UTF-8');
-		$slug = str_replace('.', '-', $slug);
-		$slug = str_replace(' ', '-', $slug);
-		$slug = str_replace('/', '-', $slug);
-		$slug = str_replace('?', '-', $slug);
-		$slug = str_replace('&', 'and', $slug);
+		$slugify = new Slugify();
+		$slug = $slugify->slugify($name);
 
 		if ($append != 0) {
 			$slug .= '-' . $append;
