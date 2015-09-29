@@ -39,9 +39,7 @@ The traits specified here take into account some special configuration parameter
 
 When using the Slug trait, it is possible to auto update the slug when saving the object (default is false)
 
-<code>
-/**
- * Set the auto update slug flag
- */
-\Skeleton\Object\Config::$auto_update_slug = 'true';
-</code>
+    /**
+     * Set the auto update slug flag
+     */
+    \Skeleton\Object\Config::$auto_update_slug = 'true';
