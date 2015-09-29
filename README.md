@@ -1,8 +1,8 @@
 # skeleton-object
+
+## Introduction
+
 Functional traits to use in objects
-
-
-Initial version of the usage of traits.
 
 The traits specified here take into account some special configuration parameters that can be set within the class.
 
@@ -33,3 +33,15 @@ The traits specified here take into account some special configuration parameter
     );
 
   Overrides the default database when using Database::get();
+
+
+## Slug
+
+When using the Slug trait, it is possible to auto update the slug when saving the object (default is false)
+
+<code>
+/**
+ * Set the auto update slug flag
+ */
+\Skeleton\Object\Config::$auto_update_slug = 'true';
+</code>
