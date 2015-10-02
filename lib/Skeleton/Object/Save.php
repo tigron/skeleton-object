@@ -50,7 +50,7 @@ trait Save {
 			$this->details['updated'] = date('Y-m-d H:i:s');
 		}
 
-		if (is_callable([$this, 'generate_slug']) AND (\Skeleton\Object\Config::$auto_update_slug === true OR !isset($this->details['slug']) OR $this->details['slug'] == '')) {
+		if (method_exists($this, 'generate_slug') AND is_callable([$this, 'generate_slug']) AND (\Skeleton\Object\Config::$auto_update_slug === true OR !isset($this->details['slug']) OR $this->details['slug'] == '')) {
 			$slug = $this->generate_slug();
 			$this->details['slug'] = $slug;
 		}
