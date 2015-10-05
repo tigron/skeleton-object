@@ -30,8 +30,8 @@ trait Get {
 		if ($id === null) {
 			throw new \Exception('Can not fetch ' . get_class() . ' with id null');
 		}
-
-		return new self($id);
+		$classname = get_called_class();
+		return new $classname($id);
 	}
 
 	/**
