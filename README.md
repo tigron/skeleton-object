@@ -6,7 +6,7 @@ Functional traits to use in objects
 
 The traits specified here take into account some special configuration parameters that can be set within the class.
 
-* disallow_set (array)
+### disallow_set (array)
 
     private static $class_configuraton = array (
       'disallow_set' => array (
@@ -18,7 +18,7 @@ The traits specified here take into account some special configuration parameter
 
   Prevents the direct setting of some class variables
 
-* database_table (string)
+###  database_table (string)
 
     private static $class_configuration = [
       'database_table' => 'my_super_special_class',
@@ -26,7 +26,7 @@ The traits specified here take into account some special configuration parameter
 
   Overrides the default strtolower(get_class()) as tablename
 
-* database_config_name (string)
+###  database_config_name (string)
 
     private static $class_configuration = [
       'database_config_name' => 'database_dsn',
@@ -34,19 +34,19 @@ The traits specified here take into account some special configuration parameter
 
   Overrides the default database when using Database::get();
 
-* table_field_id (string)
+###  table_field_id (string)
 
 	private static $class_configuration = [
 	  'table_field_id' => 'my_strange_id',
 	];
 
-* table_field_created (string)
+###  table_field_created (string)
 
 	private static $class_configuration = [
 	  'table_field_created' => 'my_strange_created_field',
 	];
 
-* table_field_updated (string)
+###  table_field_updated (string)
 
 	private static $class_configuration = [
 	  'table_field_updated' => 'my_strange_updated_field',
