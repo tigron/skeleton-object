@@ -70,7 +70,7 @@ trait Slug {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
-		$id = $db->get_one('SELECT id FROM ' . $db->quote_identifier($table) . ' WHERE slug=?', [$slug]);
+		$id = $db->get_one('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE slug=?', [$slug]);
 		if ($id === null) {
 			throw new \Exception('Object not found');
 		}

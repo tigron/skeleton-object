@@ -77,7 +77,7 @@ trait Model {
 		}
 
 		$db = self::trait_get_database();
-		$details = $db->get_row('SELECT * FROM ' . $db->quote_identifier($table) . ' WHERE id=?', [$this->id]);
+		$details = $db->get_row('SELECT * FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
 
 		if ($details === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
@@ -290,7 +290,7 @@ trait Model {
 	/**
 	 * trait_get_database_config_name: finds out which database name we need to get
 	 *
-	 * @access public
+	 * @access private
 	 * @return Database $database
 	 */
 	private static function trait_get_database() {
@@ -305,7 +305,7 @@ trait Model {
 	/**
 	 * trait_get_database_table: finds out which table we need to use
 	 *
-	 * @access public
+	 * @access private
 	 * @return string $table
 	 */
 	private static function trait_get_database_table() {
@@ -313,6 +313,48 @@ trait Model {
 			return self::$class_configuration['database_table'];
 		} else {
 			return strtolower((new \ReflectionClass(get_class()))->getShortName());
+		}
+	}
+
+	/**
+	 * trait_get_table_field_id: get the field that is used as ID
+	 *
+	 * @access private
+	 * @return string $id
+	 */
+	private static function trait_get_table_field_id() {
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_id'])) {
+			return self::$class_configuration['table_field_id'];
+		} else {
+			return 'id';
+		}
+	}
+
+	/**
+	 * trait_get_table_field_created: get the field that is used for 'created'
+	 *
+	 * @access private
+	 * @return string $created
+	 */
+	private static function trait_get_table_field_created() {
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_created'])) {
+			return self::$class_configuration['table_field_created'];
+		} else {
+			return 'created';
+		}
+	}
+
+	/**
+	 * trait_get_table_field_updated: get the field that is used for 'updated'
+	 *
+	 * @access private
+	 * @return string $updated
+	 */
+	private static function trait_get_table_field_updated() {
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_updated'])) {
+			return self::$class_configuration['table_field_updated'];
+		} else {
+			return 'updated';
 		}
 	}
 

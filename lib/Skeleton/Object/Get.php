@@ -50,12 +50,12 @@ trait Get {
 		}
 
 		if (is_null($sort)) {
-			$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE 1' . $where, []);
+			$ids = $db->get_column('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $table . ' WHERE 1' . $where, []);
 		} else {
 			if (is_null($direction)) {
 				$direction = 'ASC';
 			}
-			$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE 1' . $where . ' ORDER BY ' . $sort . ' ' . $direction);
+			$ids = $db->get_column('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $table . ' WHERE 1' . $where . ' ORDER BY ' . $sort . ' ' . $direction);
 		}
 
 		$objects = [];
