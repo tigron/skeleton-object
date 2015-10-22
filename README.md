@@ -20,19 +20,37 @@ The traits specified here take into account some special configuration parameter
 
 * database_table (string)
 
-    private static $class_configuration = array (
-      'database_table' = 'my_super_special_class',
-    );
+    private static $class_configuration = [
+      'database_table' => 'my_super_special_class',
+    ];
 
   Overrides the default strtolower(get_class()) as tablename
 
 * database_config_name (string)
 
-    private static $class_configuration = array (
-      'database_config_name' = 'database_dns',
-    );
+    private static $class_configuration = [
+      'database_config_name' => 'database_dsn',
+	];
 
   Overrides the default database when using Database::get();
+
+* table_field_id (string)
+
+	private static $class_configuration = [
+	  'table_field_id' => 'my_strange_id',
+	];
+
+* table_field_created (string)
+
+	private static $class_configuration = [
+	  'table_field_created' => 'my_strange_created_field',
+	];
+
+* table_field_updated (string)
+
+	private static $class_configuration = [
+	  'table_field_updated' => 'my_strange_updated_field',
+	];
 
 
 ## Slug

@@ -30,7 +30,7 @@ trait Delete {
 			$this->deleted = date('YmdHis');
 			$this->save();
 		} else {
-			$db->query('DELETE FROM ' . $table . ' WHERE id=?', [$this->id]);
+			$db->query('DELETE FROM ' . $table . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
 		}
 	}
 

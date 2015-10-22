@@ -39,15 +39,14 @@ trait Save {
 		}
 
 		$table = self::trait_get_database_table();
-
 		$db = self::trait_get_database();
 
 		if (!isset($this->id) OR $this->id === null) {
-			if (!isset($this->details['created'])) {
-				$this->details['created'] = date('Y-m-d H:i:s');
+			if (!isset($this->details[ self::trait_get_table_field_created()])) {
+				$this->details[ self::trait_get_table_field_created() ] = date('Y-m-d H:i:s');
 			}
 		} else {
-			$this->details['updated'] = date('Y-m-d H:i:s');
+			$this->details[ self::trait_get_table_field_updated() ] = date('Y-m-d H:i:s');
 		}
 
 		if (method_exists($this, 'generate_slug') AND is_callable([$this, 'generate_slug']) AND (\Skeleton\Object\Config::$auto_update_slug === true OR !isset($this->details['slug']) OR $this->details['slug'] == '')) {
@@ -59,7 +58,7 @@ trait Save {
 			$db->insert($table, $this->details);
 			$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
 		} else {
-			$where = 'id=' . $db->quote($this->id);
+			$where = self::trait_get_table_field_id() . '=' . $db->quote($this->id);
 			$db->update($table, $this->details, $where);
 		}
 
