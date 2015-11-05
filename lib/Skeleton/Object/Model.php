@@ -243,11 +243,16 @@ trait Model {
 	 * Is Dirty
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return bool $dirty
 	 */
-	public function is_dirty() {
+	public function is_dirty($key = null) {
 		$dirty_fields = $this->get_dirty_fields();
 		if (count($dirty_fields) == 0) {
+			return false;
+		}
+
+		if (!is_null($key) AND !isset($dirty_fields[$key])) {
 			return false;
 		}
 
