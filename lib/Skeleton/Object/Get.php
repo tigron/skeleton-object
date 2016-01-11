@@ -46,7 +46,7 @@ trait Get {
 
 		$where = '';
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['soft_delete']) AND self::$class_configuration['soft_delete'] === TRUE) {
-			$where = ' AND deleted = 0';
+			$where = ' AND archived IS NULL';
 		}
 
 		if (is_null($sort)) {
