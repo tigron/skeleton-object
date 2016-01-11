@@ -54,7 +54,7 @@ trait Delete {
 	 * @access public
 	 */
 	public function restore() {
-		$this->archived = '0000-00-00 00:00:00';
+		$this->archived = null;
 		$this->save();
 	}
 }
