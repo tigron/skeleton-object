@@ -119,11 +119,7 @@ trait Model {
 			}
 		}
 
-		if (!isset($this->details[$key])) {
-			$this->dirty_fields[$key] = '';
-		}
-
-		if (isset($this->details[$key]) AND $this->details[$key] != $value) {
+		if (array_key_exists($key, $this->details) AND $this->details[$key] != $value) {
 			// A new value is set, let's tag it as dirty
 
 			if (!isset($this->dirty_fields[$key])) {
