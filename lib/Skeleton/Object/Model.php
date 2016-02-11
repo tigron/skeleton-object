@@ -288,6 +288,19 @@ trait Model {
 		}
 	}
 
+
+	/**
+	 * Get object fields
+	 *
+	 * @access public
+	 * @return array $fields
+	 */
+	public static function get_object_fields() {
+		$db = self::trait_get_database();
+		$table = self::trait_get_database_table();
+		return $db->get_table_definition($table);
+	}
+
 	/**
 	 * trait_get_database_config_name: finds out which database name we need to get
 	 *
@@ -309,7 +322,7 @@ trait Model {
 	 * @access private
 	 * @return string $table
 	 */
-	private static function trait_get_database_table() {
+	public static function trait_get_database_table() {
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_table'])) {
 			return self::$class_configuration['database_table'];
 		} else {
