@@ -35,7 +35,7 @@ trait Delete {
 			}
 		}
 
-		$db->query('DELETE FROM ' . $table . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
+		$db->query('DELETE FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
 	}
 
 	/**
