@@ -102,7 +102,7 @@ class Text {
 	 * @param string $label
 	 * @param Language $language
 	 */
-	public static function get_by_object_label_language($object, $label, \Skeleton\I18n\Language $language, $auto_create = true) {
+	public static function get_by_object_label_language($object, $label, \Skeleton\I18n\LanguageInterface $language, $auto_create = true) {
 		$db = Database::Get();
 		$class = get_class($object);
 		$data = $db->get_row('SELECT * FROM object_text WHERE classname=? AND object_id=? AND label=? AND language_id=?', array($class, $object->id, $label, $language->id));

@@ -64,7 +64,8 @@ trait Save {
 
 		foreach ($this->object_text_updated as $key => $value) {
 			list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
-			$language = \Skeleton\I18n\Language::get_by_name_short($language);
+			$language_interface = \Skeleton\I18n\Config::$language_interface;
+			$language = $language_interface::get_by_name_short($language);
 			$object_text = Text::get_by_object_label_language($this, $label, $language);
 			$object_text->content = $this->object_text_cache[$key];
 			$object_text->save();
