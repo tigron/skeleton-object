@@ -23,9 +23,12 @@ trait Slug {
 		if (isset($this->details['name'])) {
 			$name = $this->details['name'];
 		} elseif (isset(self::$object_text_fields) AND in_array('name', self::$object_text_fields)) {
-			$language = Language::get_default();
-			$property = 'text_' . $language->name_short . '_name';
-			$name = $this->$property;
+			$key = 'text_' . \Skeleton\I18n\Config::$base_language . '_name';
+			if (isset($this->$key) AND $this->$key != '') {
+				$name = $this->$key;
+			} else {
+				throw new \Exception('No base found to generate slug');
+			}
 		} else {
 			throw new Exception('No base found to generate slug');
 		}

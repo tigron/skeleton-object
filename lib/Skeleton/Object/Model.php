@@ -168,7 +168,7 @@ trait Model {
 			throw new \Exception('Incorrect text field:' . $label);
 		}
 
-		if ($this->id === null) {
+		if ($this->id === null AND !isset($this->object_text_cache[$key])) {
 			$this->object_text_cache[$key] = '';
 		}
 
