@@ -20,4 +20,20 @@ class Config {
 	 */
 	public static $auto_update_slug = false;
 
+	/**
+	 * Caching backend handler
+	 *
+	 * @access public
+	 * @var string $classname
+	 */
+	public static $cache_handler = false;
+
+	/**
+	 * Caching backend config
+	 *
+	 * @access public
+	 * @var string $classname
+	 */
+	public static $cache_handler_config = [];
+
 }

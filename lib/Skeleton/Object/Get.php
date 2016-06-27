@@ -4,6 +4,7 @@
  *
  * @author Christophe Gosiau <christophe.gosiau@tigron.be>
  * @author Gerry Demaret <gerry.demaret@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 namespace Skeleton\Object;
@@ -28,10 +29,24 @@ trait Get {
 	 */
 	public static function get_by_id($id) {
 		if ($id === null) {
-			throw new \Exception('Can not fetch ' . get_class() . ' with id null');
+			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
-		$classname = get_called_class();
-		return new $classname($id);
+
+		if (method_exists(get_called_class(), 'cache_get')) {
+			try {
+				$object = self::cache_get(get_called_class() . '_' . $id);
+				return $object;
+			} catch (\Exception $e) {
+				$classname = get_called_class();
+				$object = new $classname($id);
+				self::cache_set($classname . '_' . $object->id, $object);
+				return $object;
+			}
+		} else {
+			$classname = get_called_class();
+			$object = new $classname($id);
+			return $object;
+		}
 	}
 
 	/**

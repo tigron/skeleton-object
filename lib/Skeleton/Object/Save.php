@@ -69,9 +69,20 @@ trait Save {
 			$object_text = Text::get_by_object_label_language($this, $label, $language);
 			$object_text->content = $this->object_text_cache[$key];
 			$object_text->save();
+
+			if (method_exists(get_called_class(), 'cache_set')) {
+				$key = get_called_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $language->name_short;
+				self::cache_delete($key);
+				self::cache_set($key, $object_text);
+			}
 		}
 
 		$this->get_details();
+
+		if (method_exists(get_called_class(), 'cache_set')) {
+			self::cache_delete(get_called_class() . '_' . $this->id);
+			self::cache_set(get_called_class() . '_' . $this->id, $this);
+		}
 
 	}
 }
