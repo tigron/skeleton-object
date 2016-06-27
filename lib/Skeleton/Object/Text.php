@@ -54,7 +54,7 @@ class Text {
 		if ($key == 'language') {
 			return \Skeleton\I18n\Language::get_by_id($this->language_id);
 		} elseif (!isset($this->details[$key])) {
-			throw new Exception('Unknown key requested: ' . $key);
+			throw new \Exception('Unknown key requested: ' . $key);
 		} else {
 			return $this->details[$key];
 		}
@@ -82,7 +82,7 @@ class Text {
 	public static function get_by_object($object) {
 		$db = Database::Get();
 		$class = get_class($object);
-		$data = $db->get_all('SELECT id FROM object_text WHERE classname=? AND object_id=?', array($class, $object->id));
+		$data = $db->get_all('SELECT * FROM object_text WHERE classname=? AND object_id=?', array($class, $object->id));
 		$object_texts = array();
 		foreach ($data as $details) {
 			$object_text = new self();
@@ -91,6 +91,7 @@ class Text {
 
 			$object_texts[] = $object_text;
 		}
+
 		return $object_texts;
 	}
 
@@ -103,27 +104,46 @@ class Text {
 	 * @param Language $language
 	 */
 	public static function get_by_object_label_language($object, $label, \Skeleton\I18n\LanguageInterface $language, $auto_create = true) {
-		$db = Database::Get();
-		$class = get_class($object);
+        if (method_exists(get_class($object), 'cache_get')) {
+			try {
+                $key = get_class($object) . '_' . $object->id . '_' . $label . '_' . $language->name_short;
+				$object = $object::cache_get($key);
+				return $object;
+			} catch (\Exception $e) {}
+        }
+
+        $db = Database::Get();
+        $class = get_class($object);
 		$data = $db->get_row('SELECT * FROM object_text WHERE classname=? AND object_id=? AND label=? AND language_id=?', array($class, $object->id, $label, $language->id));
 
 		if ($data === null) {
-			if (!$auto_create) {
-				throw new \Exception('Object text does not exists');
+		    if (!$auto_create) {
+			    throw new \Exception('Object text does not exists');
 			} else {
 				$requested = new self();
-				$requested->object = $object;
+                $requested->object = $object;
 				$requested->language_id = $language->id;
 				$requested->label = $label;
 				$requested->content = '';
 				$requested->save();
-				return $requested;
+
+                if (method_exists(get_class($object), 'cache_set')) {
+                    $key = get_class($object) . '_' . $object->id . '_' . $label . '_' . $language->name_short;
+                    $object::cache_set($key, $requested);
+                }
+
+                return $requested;
 			}
 		}
 
 		$object_text = new self();
 		$object_text->id = $data['id'];
 		$object_text->details = $data;
+
+        if (method_exists(get_class($object), 'cache_set')) {
+            $key = get_class($object) . '_' . $object->id . '_' . $label . '_' . $language->name_short;
+            $object::cache_set($key, $object_text);
+        }
 
 		return $object_text;
 	}
