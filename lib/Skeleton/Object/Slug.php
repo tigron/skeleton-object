@@ -19,7 +19,7 @@ trait Slug {
 	 *
 	 * @access private
 	 */
-	private function generate_slug($append = 0) {
+	private function generate_slug($append = 0, $unique = true) {
 		if (isset($this->details['name'])) {
 			$name = $this->details['name'];
 		} elseif (isset(self::$object_text_fields) AND in_array('name', self::$object_text_fields)) {
@@ -35,6 +35,10 @@ trait Slug {
 
 		$slugify = new Slugify();
 		$slug = $slugify->slugify($name);
+
+		if ($unique === false) {
+			return $slug;
+		}
 
 		if ($append != 0) {
 			$slug .= '-' . $append;
