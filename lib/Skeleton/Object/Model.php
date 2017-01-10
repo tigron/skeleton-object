@@ -316,7 +316,7 @@ trait Model {
 	 * @access private
 	 * @return Database $database
 	 */
-	private static function trait_get_database() {
+	protected static function trait_get_database() {
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_config_name'])) {
 			$db = Database::get(self::$class_configuration['database_config_name']);
 		} else {
@@ -345,7 +345,7 @@ trait Model {
 	 * @access private
 	 * @return string $id
 	 */
-	private static function trait_get_table_field_id() {
+	protected static function trait_get_table_field_id() {
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_id'])) {
 			return self::$class_configuration['table_field_id'];
 		} else {
@@ -387,7 +387,7 @@ trait Model {
 	 * @access private
 	 * @return array $tables
 	 */
-	private static function trait_get_link_tables() {
+	protected static function trait_get_link_tables() {
 		$db = self::trait_get_database();
 		$table = self::trait_get_database_table();
 		$fields = $db->get_columns($table);
