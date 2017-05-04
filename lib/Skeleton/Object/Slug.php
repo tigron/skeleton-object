@@ -20,8 +20,13 @@ trait Slug {
 	 * @access private
 	 */
 	private function generate_slug($append = 0, $unique = true) {
-		if (isset($this->details['name'])) {
-			$name = $this->details['name'];
+		$sluggable_field = 'name'; // default
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['sluggable'])) {
+			$sluggable_field = self::$class_configuration['sluggable'];
+		}
+
+		if (isset($this->details[$sluggable_field])) {
+			$name = $this->details[$sluggable_field];
 		} elseif (isset(self::$object_text_fields) AND in_array('name', self::$object_text_fields)) {
 			$key = 'text_' . \Skeleton\I18n\Config::$base_language . '_name';
 			if (isset($this->$key) AND $this->$key != '') {
@@ -31,6 +36,10 @@ trait Slug {
 			}
 		} else {
 			throw new Exception('No base found to generate slug');
+		}
+
+		if ($this->is_dirty($sluggable_field) === false) {
+			return $this->details['slug'];
 		}
 
 		$slugify = new Slugify();
