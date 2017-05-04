@@ -52,6 +52,12 @@ The traits specified here take into account some special configuration parameter
 	  'table_field_updated' => 'my_strange_updated_field',
 	];
 
+###  sluggable (string)
+
+	private static $class_configuration = [
+	  'sluggable' => 'my_field_to_slug',
+	];
+
 
 ## Available functions
 
