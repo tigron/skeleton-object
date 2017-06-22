@@ -138,6 +138,9 @@ trait Model {
 	 * @param string $value
 	 */
 	private function trait_set_object_text($key, $value) {
+		if (!class_exists('\Skeleton\I18n\Object\Text')) {
+			throw new \Exception('Skeleton package "skeleton-i18n" needs to be installed to use object text');
+		}
 		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
 
 		if (!in_array($label, self::$object_text_fields)) {
@@ -162,6 +165,10 @@ trait Model {
 	 * @param string $value
 	 */
 	private function trait_get_object_text($key) {
+		if (!class_exists('\Skeleton\I18n\Object\Text')) {
+			throw new \Exception('Skeleton package "skeleton-i18n" needs to be installed to use object text');
+		}
+
 		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
 
 		if (!in_array($label, self::$object_text_fields)) {
@@ -183,7 +190,7 @@ trait Model {
 
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$language = $language_interface::get_by_name_short($language);
-			$this->object_text_cache[$key] = Text::get_by_object_label_language($this, $label, $language)->content;
+			$this->object_text_cache[$key] = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language)->content;
 		}
 
 		return $this->object_text_cache[$key];
