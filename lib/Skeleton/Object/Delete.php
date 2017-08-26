@@ -17,14 +17,6 @@ trait Delete {
 	 * @access public
 	 */
 	public function delete() {
-		/**
-		 * This code is to prevent unwanted deletion
-		 * It is temporary and should be removed in later versions
-		 */
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['soft_delete']) AND self::$class_configuration['soft_delete'] === TRUE) {
-			throw new \Exception('It seems you don\'t want to delete this object, please use "archive()" instead');
-		}
-
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
@@ -51,19 +43,21 @@ trait Delete {
 	 * Archive
 	 *
 	 * @access public
+	 * @param bool $validate
 	 */
-	public function archive() {
+	public function archive($validate = true) {
 		$this->archived = date('Y-m-d H:i:s');
-		$this->save();
+		$this->save($validate);
 	}
 
 	/**
 	 * Restore
 	 *
 	 * @access public
+	 * @param bool $validate
 	 */
-	public function restore() {
+	public function restore($validate = true) {
 		$this->archived = null;
-		$this->save();
+		$this->save($validate);
 	}
 }
