@@ -27,10 +27,10 @@ trait Slug {
 
 		if (isset($this->details[$sluggable_field])) {
 			$name = $this->details[$sluggable_field];
-		} elseif (isset(self::$object_text_fields) AND in_array('name', self::$object_text_fields)) {
-			$key = 'text_' . \Skeleton\I18n\Config::$base_language . '_name';
-			if (isset($this->$key) AND $this->$key != '') {
-				$name = $this->$key;
+		} elseif (isset(self::$object_text_fields) AND in_array(self::$class_configuration['sluggable'], self::$object_text_fields)) {
+			$sluggable_field = 'text_' . \Skeleton\I18n\Config::$base_language . '_' . self::$class_configuration['sluggable'];
+			if (isset($this->$sluggable_field) AND $this->$sluggable_field != '') {
+				$name = $this->$sluggable_field;
 			} else {
 				throw new \Exception('No base found to generate slug');
 			}
