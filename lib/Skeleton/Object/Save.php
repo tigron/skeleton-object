@@ -77,6 +77,10 @@ trait Save {
 			}
 		}
 
+		if (method_exists($this, 'trait_child_save') and is_callable([$this, 'trait_child_save'])) {
+			$this->trait_child_save();
+		}
+
 		$this->get_details();
 
 		if (method_exists(get_called_class(), 'cache_set')) {

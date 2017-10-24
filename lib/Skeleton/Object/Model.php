@@ -58,6 +58,11 @@ trait Model {
 	 * @param int $id
 	 */
 	public function __construct($id = null) {
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['child_classname_field'])) {
+			$classname_field = self::$class_configuration['child_classname_field'];
+			$this->details[$classname_field] = get_class($this);
+		}
+
 		if ($id !== null) {
 			$this->id = $id;
 			$this->get_details();
@@ -85,6 +90,10 @@ trait Model {
 
 		$this->details = $details;
 		$this->reset_dirty_fields();
+
+		if (method_exists($this, 'get_child_details') and is_callable([$this, 'get_child_details'])) {
+			$this->get_child_details();
+		}
 	}
 
 	/**
@@ -127,7 +136,15 @@ trait Model {
 			}
 		}
 
+		if (isset($this->child_details) and array_key_exists($key, $this->child_details) and $this->child_details[$key] != $value) {
+
+			if (!isset($this->dirty_fields[$key])) {
+				$this->dirty_fields[$key] = $this->child_details[$key];
+			}
+		}
+
 		$this->details[$key] = $value;
+		$this->child_details[$key] = $value;
 	}
 
 	/**
@@ -212,6 +229,10 @@ trait Model {
 			return $this->details[$key];
 		}
 
+		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
+			return $this->child_details[$key];
+		}
+
 		if (isset(self::$object_text_fields)) {
 			if (strpos($key, 'text_') === 0) {
 				return $this->trait_get_object_text($key);
@@ -234,6 +255,10 @@ trait Model {
 		}
 
 		if (array_key_exists($key, $this->details)) {
+			return true;
+		}
+
+		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
 			return true;
 		}
 

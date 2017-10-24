@@ -17,7 +17,12 @@ trait Get {
 	 * @return array $details
 	 */
 	public function get_info() {
-		return $this->details;
+		$info = [];
+		if (isset($this->child_details)) {
+			$info = array_merge($info, $this->child_details);
+		}
+		$info = array_merge($info, $this->details);
+		return $info;
 	}
 
 	/**
@@ -32,18 +37,28 @@ trait Get {
 			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
 
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['child_classname_field'])) {
+			$classname_field = self::$class_configuration['child_classname_field'];
+			$table = self::trait_get_database_table();
+			$db = self::trait_get_database();
+			$classname = $db->get_one('SELECT ' . $classname_field . ' FROM ' . $db->quote_identifier($table) . ' WHERE id=?', [ $id ]);
+			if ($classname === null) {
+				throw new \Exception('Can not fetch ' . get_called_class() . ' with id ' . $id);
+			}
+		} else {
+			$classname = get_called_class();
+		}
+
 		if (method_exists(get_called_class(), 'cache_get')) {
 			try {
 				$object = self::cache_get(get_called_class() . '_' . $id);
 				return $object;
 			} catch (\Exception $e) {
-				$classname = get_called_class();
 				$object = new $classname($id);
 				self::cache_set($classname . '_' . $object->id, $object);
 				return $object;
 			}
 		} else {
-			$classname = get_called_class();
 			$object = new $classname($id);
 			return $object;
 		}
