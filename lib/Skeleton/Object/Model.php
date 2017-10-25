@@ -144,7 +144,9 @@ trait Model {
 		}
 
 		$this->details[$key] = $value;
-		$this->child_details[$key] = $value;
+		if (isset($this->child_details)) {
+			$this->child_details[$key] = $value;
+		}
 	}
 
 	/**
