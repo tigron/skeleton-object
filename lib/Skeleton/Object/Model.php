@@ -87,12 +87,11 @@ trait Model {
 		if ($details === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
-
 		$this->details = $details;
 		$this->reset_dirty_fields();
 
-		if (method_exists($this, 'get_child_details') and is_callable([$this, 'get_child_details'])) {
-			$this->get_child_details();
+		if (method_exists($this, 'trait_get_child_details') and is_callable([$this, 'trait_get_child_details'])) {
+			$this->trait_get_child_details();
 		}
 	}
 

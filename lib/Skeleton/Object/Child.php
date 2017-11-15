@@ -25,7 +25,8 @@ trait Child {
 	 *
 	 * @access private
 	 */
-	protected function get_child_details() {
+	protected function trait_get_child_details() {
+
 		$table = self::trait_get_child_database_table();
 
 		if (!isset($this->id) OR $this->id === null) {
