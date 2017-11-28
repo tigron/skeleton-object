@@ -226,6 +226,10 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
+		if (isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+			return $key::get_by_id($this->child_details[strtolower($key) . '_id']);
+		}
+
 		if (array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
@@ -252,6 +256,10 @@ trait Model {
 	 */
 	public function __isset($key) {
 		if (isset($this->details[strtolower($key) . '_id']) AND class_exists($key)) {
+			return true;
+		}
+
+		if (isset($this->child_details) AND isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
 			return true;
 		}
 
