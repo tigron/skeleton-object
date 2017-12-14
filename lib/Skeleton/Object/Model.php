@@ -226,7 +226,7 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+		if (isset($this->child_details) and isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
 			return $key::get_by_id($this->child_details[strtolower($key) . '_id']);
 		}
 
