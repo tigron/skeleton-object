@@ -8,7 +8,7 @@ The traits specified here take into account some special configuration parameter
 
 ### disallow_set (array)
 
-    private static $class_configuraton = array (
+    private static $class_configuration = array (
       'disallow_set' => array (
         'directory',
         'full_path',
