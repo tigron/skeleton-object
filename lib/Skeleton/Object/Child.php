@@ -26,8 +26,11 @@ trait Child {
 	 * @access private
 	 */
 	protected function trait_get_child_details() {
-
 		$table = self::trait_get_child_database_table();
+
+		if ($table === null) {
+			return;
+		}
 
 		if (!isset($this->id) OR $this->id === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: id not set');
@@ -53,6 +56,10 @@ trait Child {
 		$db = self::trait_get_database();
 		$table = self::trait_get_child_database_table();
 
+		if ($table === null) {
+			return;
+		}
+
 		$count = $db->get_one('SELECT count(*) FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_parent_table_field_id() . '=?', [$this->id]);
 
 		$this->child_details[self::trait_get_parent_table_field_id()] = $this->id;
@@ -71,7 +78,7 @@ trait Child {
 	 * @return string $table
 	 */
 	public static function trait_get_child_database_table() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_table'])) {
+		if (property_exists(get_class(), 'class_configuration') and (isset(self::$class_configuration['database_table']) or self::$class_configuration['database_table'] === null)) {
 			return self::$class_configuration['database_table'];
 		} else {
 			return strtolower((new \ReflectionClass(get_class()))->getShortName());
@@ -85,7 +92,7 @@ trait Child {
 	 * @return string $id
 	 */
 	public static function trait_get_parent_table_field_id() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_id'])) {
+		if (property_exists(get_class(), 'class_configuration') and (isset(self::$class_configuration['database_table']) or self::$class_configuration['database_table'] === null)) {
 			return self::$class_configuration['parent_field_id'];
 		} else {
 			return strtolower((new \ReflectionClass(get_class()))->getParentClass()->getShortName() . '_id');
