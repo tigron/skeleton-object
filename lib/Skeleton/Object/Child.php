@@ -78,11 +78,15 @@ trait Child {
 	 * @return string $table
 	 */
 	public static function trait_get_child_database_table() {
-		if (property_exists(get_class(), 'class_configuration') and (isset(self::$class_configuration['database_table']) or self::$class_configuration['database_table'] === null)) {
-			return self::$class_configuration['database_table'];
-		} else {
-			return strtolower((new \ReflectionClass(get_class()))->getShortName());
+		if (property_exists(get_class(), 'class_configuration') and is_array(self::$class_configuration)) {
+			if (array_key_exists('database_table', self::$class_configuration) and self::$class_configuration['database_table'] === null) {
+				return null;
+			} elseif (isset(self::$class_configuration['database_table'])) {
+				return self::$class_configuration['database_table'];
+			}
 		}
+
+		return strtolower((new \ReflectionClass(get_class()))->getShortName());
 	}
 
 	/**
@@ -92,7 +96,7 @@ trait Child {
 	 * @return string $id
 	 */
 	public static function trait_get_parent_table_field_id() {
-		if (property_exists(get_class(), 'class_configuration') and (isset(self::$class_configuration['database_table']) or self::$class_configuration['database_table'] === null)) {
+		if (property_exists(get_class(), 'class_configuration') and isset(self::$class_configuration['parent_field_id'])) {
 			return self::$class_configuration['parent_field_id'];
 		} else {
 			return strtolower((new \ReflectionClass(get_class()))->getParentClass()->getShortName() . '_id');
