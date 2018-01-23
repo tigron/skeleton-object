@@ -38,7 +38,7 @@ trait Slug {
 			throw new \Exception('No base found to generate slug');
 		}
 
-		if (isset($this->id) AND $this->is_dirty($sluggable_field) === false) {
+		if (isset($this->id) AND $this->is_dirty($sluggable_field) === false and !empty($this->details['slug'])) {
 			return $this->details['slug'];
 		}
 
