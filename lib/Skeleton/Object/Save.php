@@ -15,6 +15,7 @@ class Exception_Validation extends \Exception {
 
 	public function __construct($errors) {
 		$this->errors = $errors;
+		$this->message = 'Validation error! The following fields contain errors: ' . implode(', ', array_keys($this->errors));		
 	}
 
 	public function get_errors() {
