@@ -226,16 +226,16 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (isset($this->child_details) and isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
-			return $key::get_by_id($this->child_details[strtolower($key) . '_id']);
-		}
-
 		if (array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
 
 		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
 			return $this->child_details[$key];
+		}
+
+		if (isset($this->child_details) and isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+			return $key::get_by_id($this->child_details[strtolower($key) . '_id']);
 		}
 
 		if (isset(self::$object_text_fields)) {
@@ -259,15 +259,7 @@ trait Model {
 			return true;
 		}
 
-		if (isset($this->child_details) AND isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
-			return true;
-		}
-
 		if (array_key_exists($key, $this->details)) {
-			return true;
-		}
-
-		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
 			return true;
 		}
 
@@ -282,6 +274,15 @@ trait Model {
 				}
 			}
 		}
+
+		if (isset($this->child_details) AND isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+			return true;
+		}
+
+		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
+			return true;
+		}
+
 		return false;
 	}
 
