@@ -148,17 +148,19 @@ the cache can be done per Skeleton Object:
 
 There are 3 caching flavours:
 
-  * Memory: This is a per-process caching technique. Objects are stored in
-    a process cache. If the same object is requested multiple times, it is
-    only queried once from database.
-    Be aware that this cache does not take care of other PHP processes. If
-    an object gets updated in another process, your cache won't be invalidated.
+### Memory
+This is a per-process caching technique. Objects are stored in
+a process cache. If the same object is requested multiple times, it is
+only queried once from database.
+Be aware that this cache does not take care of other PHP processes. If
+an object gets updated in another process, your cache won't be invalidated.
 
     \Skeleton\Object\Config::$cache_handler = 'Memory';
 
-  * Memcache: Caching technique with php-memcache
-    (http://php.net/manual/en/book.memcache.php). Hostname, port and expire
-    should be set via cache config.
+### Memcache
+Caching technique with php-memcache 
+(http://php.net/manual/en/book.memcache.php). Hostname, port and expire should 
+be set via cache config.
 
     \Skeleton\Object\Config::$cache_handler = 'Memcache';
     \Skeleton\Object\Config::$cache_handler_config = [
@@ -167,9 +169,10 @@ There are 3 caching flavours:
     	'expire' => 600,
     ];
 
-  * Memcached: Caching technique with php-memcached
-    (http://php.net/manual/en/book.memcached.php). Hostname, port and expire
-    should be set via cache config.
+### Memcached
+Caching technique with php-memcached
+(http://php.net/manual/en/book.memcached.php). Hostname, port and expire
+should be set via cache config.
 
     \Skeleton\Object\Config::$cache_handler = 'Memcached';
     \Skeleton\Object\Config::$cache_handler_config = [
@@ -177,3 +180,4 @@ There are 3 caching flavours:
     	'port' => '11211',
     	'expire' => 600,
     ];
+    
