@@ -15,7 +15,7 @@ class Exception_Validation extends \Exception {
 
 	public function __construct($errors) {
 		$this->errors = $errors;
-		$this->message = 'Validation error! The following fields contain errors: ' . implode(', ', array_keys($this->errors));		
+		$this->message = 'Validation error! The following fields contain errors: ' . implode(', ', array_keys($this->errors));
 	}
 
 	public function get_errors() {
@@ -72,7 +72,7 @@ trait Save {
 			$object_text->save();
 
 			if (method_exists(get_called_class(), 'cache_set')) {
-				$key = get_called_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $language->name_short;
+				$key = get_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $language->name_short;
 				self::cache_delete($key);
 				self::cache_set($key, $object_text);
 			}
@@ -84,9 +84,9 @@ trait Save {
 
 		$this->get_details();
 
-		if (method_exists(get_called_class(), 'cache_set')) {
-			self::cache_delete(get_called_class() . '_' . $this->id);
-			self::cache_set(get_called_class() . '_' . $this->id, $this);
+		if (method_exists(get_class(), 'cache_set')) {
+			self::cache_delete(get_class() . '_' . $this->id);
+			self::cache_set(get_class() . '_' . $this->id, $this);
 		}
 
 	}
