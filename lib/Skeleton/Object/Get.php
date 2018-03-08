@@ -37,6 +37,13 @@ trait Get {
 			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
 
+		if (method_exists(get_class(), 'cache_get')) {
+			try {
+				$object = self::cache_get(get_class() . '_' . $id);
+				return $object;
+			} catch (\Exception $e) {	}
+		}
+
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
 			$table = self::trait_get_database_table();
@@ -49,19 +56,11 @@ trait Get {
 			$classname = get_called_class();
 		}
 
-		if (method_exists(get_called_class(), 'cache_get')) {
-			try {
-				$object = self::cache_get(get_called_class() . '_' . $id);
-				return $object;
-			} catch (\Exception $e) {
-				$object = new $classname($id);
-				self::cache_set($classname . '_' . $object->id, $object);
-				return $object;
-			}
-		} else {
-			$object = new $classname($id);
-			return $object;
+		$object = new $classname($id);
+		if (method_exists(get_class(), 'cache_set')) {
+			self::cache_set(get_class() . '_' . $id, $object);
 		}
+		return $object;
 	}
 
 	/**
