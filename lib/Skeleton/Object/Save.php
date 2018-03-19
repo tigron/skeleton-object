@@ -71,7 +71,7 @@ trait Save {
 			$object_text->content = $this->object_text_cache[$key];
 			$object_text->save();
 
-			if (method_exists(get_called_class(), 'cache_set')) {
+			if (method_exists(get_class(), 'cache_set')) {
 				$key = get_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $language->name_short;
 				self::cache_delete($key);
 				self::cache_set($key, $object_text);

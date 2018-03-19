@@ -198,9 +198,9 @@ trait Model {
 		}
 
 		if (!isset($this->object_text_cache[$key])) {
-			if (method_exists(get_called_class(), 'cache_get')) {
+			if (method_exists(get_class(), 'cache_get')) {
 				try {
-					$cache_key = get_called_class() . '_' . $this->id . '_' . $label . '_' . $language;
+					$cache_key = get_class() . '_' . $this->id . '_' . $label . '_' . $language;
 					$this->object_text_cache[$key] = self::cache_get($cache_key)->content;
 					return $this->object_text_cache[$key];
 				} catch (\Exception $e) {}
