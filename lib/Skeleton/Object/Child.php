@@ -52,6 +52,23 @@ trait Child {
 	 *
 	 * @access public
 	 */
+	protected function trait_child_delete() {
+		$db = self::trait_get_database();
+		$table = self::trait_get_child_database_table();
+
+		if ($table === null) {
+			return;
+		}
+
+		$this->child_details[self::trait_get_parent_table_field_id()] = $this->id;
+		$db->query('DELETE FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_parent_table_field_id() . '=?', [$this->id]);
+	}
+
+	/**
+	 * Save
+	 *
+	 * @access public
+	 */
 	protected function trait_child_save() {
 		$db = self::trait_get_database();
 		$table = self::trait_get_child_database_table();

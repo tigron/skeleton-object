@@ -17,6 +17,11 @@ trait Delete {
 	 * @access public
 	 */
 	public function delete() {
+
+		if (method_exists($this, 'trait_child_delete') and is_callable([$this, 'trait_child_delete'])) {
+			$this->trait_child_delete();
+		}
+
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
