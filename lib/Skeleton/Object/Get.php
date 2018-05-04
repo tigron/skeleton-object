@@ -37,7 +37,7 @@ trait Get {
 			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
 
-		if (method_exists(get_class(), 'cache_get')) {
+		if (self::trait_cache_enabled()) {
 			try {
 				$object = self::cache_get(get_class() . '_' . $id);
 				return $object;
@@ -57,7 +57,7 @@ trait Get {
 		}
 
 		$object = new $classname($id);
-		if (method_exists(get_class(), 'cache_set')) {
+		if (self::trait_cache_enabled()) {
 			self::cache_set(get_class() . '_' . $id, $object);
 		}
 		return $object;

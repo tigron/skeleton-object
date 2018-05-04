@@ -198,7 +198,7 @@ trait Model {
 		}
 
 		if (!isset($this->object_text_cache[$key])) {
-			if (method_exists(get_class(), 'cache_get')) {
+			if (self::trait_cache_enabled()) {
 				try {
 					$cache_key = get_class() . '_' . $this->id . '_' . $label . '_' . $language;
 					$this->object_text_cache[$key] = self::cache_get($cache_key)->content;
@@ -339,6 +339,23 @@ trait Model {
 		}
 	}
 
+	/**
+	 * Is Cache enabled
+	 *
+	 * @access private
+	 * @return bool $cache_enabled
+	 */
+	private static function trait_cache_enabled() {
+		if (!method_exists(get_called_class(), 'cache_get')) {
+			return false;
+		}
+
+		if (Config::$cache_handler === false) {
+			return false;
+		}
+
+		return true;
+	}
 
 	/**
 	 * Get object fields

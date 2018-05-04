@@ -30,14 +30,14 @@ trait Delete {
 			foreach ($object_texts as $object_text) {
 				$object_text->delete();
 
-				if (method_exists(get_called_class(), 'cache_delete')) {
+				if (self::trait_cache_enabled()) {
 					$key = get_called_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $object_text->language->name_short;
 					self::cache_delete($key);
 				}
 			}
 		}
 
-		if (method_exists(get_called_class(), 'cache_delete')) {
+		if (self::trait_cache_enabled()) {
 			self::cache_delete(get_called_class() . '_' . $this->id);
 		}
 
