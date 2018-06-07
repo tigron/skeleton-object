@@ -299,7 +299,7 @@ trait Model {
 			return false;
 		}
 
-		if (!is_null($key) AND !array_key_exists($key, $dirty_fields[$key])) {
+		if (!is_null($key) AND !array_key_exists($key, $dirty_fields)) {
 			return false;
 		}
 
