@@ -198,14 +198,6 @@ trait Model {
 		}
 
 		if (!isset($this->object_text_cache[$key])) {
-			if (self::trait_cache_enabled()) {
-				try {
-					$cache_key = get_class() . '_' . $this->id . '_' . $label . '_' . $language;
-					$this->object_text_cache[$key] = self::cache_get($cache_key)->content;
-					return $this->object_text_cache[$key];
-				} catch (\Exception $e) {}
-			}
-
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$language = $language_interface::get_by_name_short($language);
 			$this->object_text_cache[$key] = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language)->content;
