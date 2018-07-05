@@ -26,6 +26,16 @@ trait Get {
 	}
 
 	/**
+	 * Get classname
+	 *
+	 * @access public
+	 * @return string $classname
+	 */
+	public function get_classname() {
+		return (new \ReflectionClass($this))->getShortName();
+	}
+
+	/**
 	 * Get by id
 	 *
 	 * @access public
