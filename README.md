@@ -53,6 +53,12 @@ Overrides the default database when using Database::get();
 	  'table_field_updated' => 'my_strange_updated_field',
 	];
 
+###  table_field_archived (string)
+
+	private static $class_configuration = [
+	  'table_field_archived' => 'my_strange_updated_archived',
+	];
+
 ###  sluggable (string)
 
 	private static $class_configuration = [
@@ -102,7 +108,7 @@ returns the object with id '$id'
 
     Object::get_all($sort, $direction)
 
-returns all object.
+returns all objects. If the an archived column exists, this will be taken into account
 
 Optional parameters:
 
