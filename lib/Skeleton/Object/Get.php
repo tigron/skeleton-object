@@ -84,8 +84,13 @@ trait Get {
 		$db = self::trait_get_database();
 
 		$where = '';
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['soft_delete']) AND self::$class_configuration['soft_delete'] === TRUE) {
-			$where = ' AND archived IS NULL';
+		$field_archived = self::trait_get_table_field_archived();
+		foreach (self::get_object_fields() as $field) {
+			if ($field['field'] != $field_archived) {
+				continue;
+			}
+
+			$where = ' AND ' . $field_archived . ' IS NULL';
 		}
 
 		if (is_null($sort)) {

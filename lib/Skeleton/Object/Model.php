@@ -433,6 +433,20 @@ trait Model {
 	}
 
 	/**
+	 * trait_get_table_field_archived: get the field that is used for 'archived'
+	 *
+	 * @access private
+	 * @return string $updated
+	 */
+	private static function trait_get_table_field_archived() {
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_archived'])) {
+			return self::$class_configuration['table_field_archived'];
+		} else {
+			return 'archived';
+		}
+	}
+
+	/**
 	 * Trait_get_link_tables
 	 *
 	 * @access private
