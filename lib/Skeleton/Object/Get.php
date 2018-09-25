@@ -86,7 +86,7 @@ trait Get {
 		$where = '';
 		$field_archived = self::trait_get_table_field_archived();
 		foreach (self::get_object_fields() as $field) {
-			if ($field['field'] != $field_archived) {
+			if ($field['Field'] != $field_archived) {
 				continue;
 			}
 
