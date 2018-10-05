@@ -102,6 +102,10 @@ resets the field 'archived'
 
 returns an array containing all database fields of the object
 
+    $object->get_classname()
+
+returns the classname of the object
+
     Object::get_by_id($id)
 
 returns the object with id '$id'
