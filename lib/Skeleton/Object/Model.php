@@ -52,6 +52,16 @@ trait Model {
 	private $object_text_updated = [];
 
 	/**
+	 * child_casted_object
+	 *
+	 * Used to cleanup a casted child object
+	 *
+	 * @access private
+	 * @var object $child_casted_object
+	 */
+	private $child_casted_object = null;
+
+	/**
 	 * Constructor
 	 *
 	 * @access public
@@ -67,6 +77,43 @@ trait Model {
 			$this->id = $id;
 			$this->get_details();
 		}
+	}
+
+	/**
+	 * Cast
+	 *
+	 * @access public
+	 * @param string $classname
+	 */
+	public function cast($classname) {
+		if (!isset(self::$class_configuration['child_classname_field'])) {
+			throw new Exception('Only Child classes can be casted to another child class');
+		}
+		if (!class_exists($classname)) {
+			throw new Exception('Classname "' . $classname . '" doesn\'t exist');
+		}
+		if (get_class($this) == $classname) {
+			return $this;
+		}
+
+		$object = new $classname();
+		$object->id = $this->id;
+		$object->details = $this->details;
+		if (isset($object->child_details) and isset($this->child_details)) {
+			$object->child_details = $this->child_details;
+		}
+		$object->child_casted_object = $this;
+		$classname_field = self::$class_configuration['child_classname_field'];
+		$object->$classname_field = $classname;
+
+		return $object;
+
+		if ($classname == $this->classname) {
+			return $this;
+		}
+		$db = Database::get();
+		$db->query('UPDATE document SET classname=? WHERE id=?', [ $classname, $this->id ]);
+		return self::get_by_id($this->id);
 	}
 
 	/**

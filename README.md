@@ -148,6 +148,9 @@ You'll need to adhere to a few simple rules for this to work:
   * The parent class needs to have a field to store the classname of
     the child object. This value should be set via the class
     configuration `child_classname_field`.
+  * A child can be casted into another child class via
+
+    $new_class = $object->cast('another_child_class');
 
 ## Cache trait
 
@@ -168,8 +171,8 @@ an object gets updated in another process, your cache won't be invalidated.
     \Skeleton\Object\Config::$cache_handler = 'Memory';
 
 ### Memcache
-Caching technique with php-memcache 
-(http://php.net/manual/en/book.memcache.php). Hostname, port and expire should 
+Caching technique with php-memcache
+(http://php.net/manual/en/book.memcache.php). Hostname, port and expire should
 be set via cache config.
 
     \Skeleton\Object\Config::$cache_handler = 'Memcache';
@@ -190,4 +193,3 @@ should be set via cache config.
     	'port' => '11211',
     	'expire' => 600,
     ];
-    
