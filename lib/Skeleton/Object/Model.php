@@ -107,13 +107,6 @@ trait Model {
 		$object->$classname_field = $classname;
 
 		return $object;
-
-		if ($classname == $this->classname) {
-			return $this;
-		}
-		$db = Database::get();
-		$db->query('UPDATE document SET classname=? WHERE id=?', [ $classname, $this->id ]);
-		return self::get_by_id($this->id);
 	}
 
 	/**
