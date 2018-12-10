@@ -77,7 +77,7 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 			self::$memcached->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_IGBINARY);
 			self::$memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
 			self::$memcached->setOption(\Memcached::OPT_NO_BLOCK, true);
-			self::$memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+			self::$memcached->setOption(\Memcached::OPT_TCP_NODELAY, true);
 			self::$memcached->addServers([
 				[$config['hostname'], $config['port']]
 			]);
