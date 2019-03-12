@@ -89,11 +89,11 @@ trait Model {
 		if (!isset(self::$class_configuration['child_classname_field'])) {
 			throw new \Exception('Only Child classes can be casted to another child class');
 		}
-		
+
 		if (!class_exists($classname)) {
 			throw new \Exception('Classname "' . $classname . '" doesn\'t exist');
 		}
-		
+
 		if (get_class($this) == $classname) {
 			return $this;
 		}
@@ -129,7 +129,7 @@ trait Model {
 		if ($details === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
-		
+
 		$this->id = $details['id'];
 		$this->details = $details;
 		$this->reset_dirty_fields();
