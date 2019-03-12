@@ -87,11 +87,13 @@ trait Model {
 	 */
 	public function cast($classname) {
 		if (!isset(self::$class_configuration['child_classname_field'])) {
-			throw new Exception('Only Child classes can be casted to another child class');
+			throw new \Exception('Only Child classes can be casted to another child class');
 		}
+		
 		if (!class_exists($classname)) {
-			throw new Exception('Classname "' . $classname . '" doesn\'t exist');
+			throw new \Exception('Classname "' . $classname . '" doesn\'t exist');
 		}
+		
 		if (get_class($this) == $classname) {
 			return $this;
 		}
@@ -122,11 +124,13 @@ trait Model {
 		}
 
 		$db = self::trait_get_database();
-		$details = $db->get_row('SELECT * FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
+		$details = $db->get_row('SELECT * FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . ' = ?', [ $this->id ]);
 
 		if ($details === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
+		
+		$this->id = $details['id'];
 		$this->details = $details;
 		$this->reset_dirty_fields();
 
