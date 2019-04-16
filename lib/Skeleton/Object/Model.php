@@ -130,7 +130,7 @@ trait Model {
 			throw new \Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
 
-		$this->id = $details['id'];
+		$this->id = $details[self::trait_get_table_field_id()];
 		$this->details = $details;
 		$this->reset_dirty_fields();
 
