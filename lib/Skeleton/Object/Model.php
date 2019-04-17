@@ -262,7 +262,7 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (array_key_exists($key, $this->details)) {
+		if (is_array($this->details) and array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
 
@@ -295,7 +295,7 @@ trait Model {
 			return true;
 		}
 
-		if (array_key_exists($key, $this->details)) {
+		if (is_array($this->details) and array_key_exists($key, $this->details)) {
 			return true;
 		}
 
