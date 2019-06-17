@@ -51,8 +51,11 @@ trait Save {
 		}
 
 		if (method_exists($this, 'generate_slug') AND is_callable([$this, 'generate_slug']) AND (\Skeleton\Object\Config::$auto_update_slug === true OR !isset($this->details['slug']) OR $this->details['slug'] == '')) {
-			$slug = $this->generate_slug();
-			$this->details['slug'] = $slug;
+			$this->details['slug'] = $this->generate_slug();
+		}
+
+		if (method_exists($this, 'generate_uuid') AND is_callable([$this, 'generate_uuid']) AND (!isset($this->details['uuid']) OR $this->details['uuid'] == '')) {
+			$this->details['uuid'] = $this->generate_uuid();
 		}
 
 		if (!isset($this->id) OR $this->id === null) {
