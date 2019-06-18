@@ -129,6 +129,11 @@ saving the object (default is false).
      */
     \Skeleton\Object\Config::$auto_update_slug = true;
 
+## UUID trait
+
+When the UUID trait is in use, the field with the name "uuid" will be
+populated with a random and unique UUIDv4.
+
 ## Child trait
 
 Use this trait if you want to extend from a skeleton object and maybe
