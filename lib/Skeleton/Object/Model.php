@@ -500,7 +500,7 @@ trait Model {
 		$db = self::trait_get_database();
 		$table = self::trait_get_database_table();
 		$fields = $db->get_columns($table);
-		$tables = $db->get_column('SHOW tables');
+		$tables = $db->get_tables();
 
 		$joins = [];
 		foreach ($fields as $field) {
