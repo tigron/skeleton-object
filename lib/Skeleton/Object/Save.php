@@ -34,6 +34,8 @@ trait Save {
 	public function save($validate = true) {
 		// If we have a validate() method, execute it
 		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
+			$errors = [];
+
 			if ($this->validate($errors) === false) {
 				throw new Exception_Validation($errors);
 			}
