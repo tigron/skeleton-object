@@ -62,19 +62,7 @@ trait Save {
 
 		if (!isset($this->id) OR $this->id === null) {
 			$db->insert($table, $this->details);
-
-			// FIXME: This should probably be implemented as a method in the database proxy class
-			// Something like $db->get_last_id() or some such?
-			switch ($db->get_dbms()) {
-				case 'mysql':
-					$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
-					break;
-				case 'pgsql':
-					$this->id = $db->get_one("SELECT currval(pg_get_serial_sequence('" . $table . "', '" . self::trait_get_table_field_id() . "'))");
-					break;
-				default:
-					throw new \Exception('Unsupported DBMS');
-			}
+			$this->id = $db->get_insert_id($table, self::trait_get_table_field_id());
 
 			if ($this->id === null) {
 				throw new \Exception('Object was not properly saved, id is still null');
