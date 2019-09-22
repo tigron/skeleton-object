@@ -76,10 +76,10 @@ trait Get {
 	/**
 	 * Get all
 	 *
-     * @param string|null $sort
-     * @param string|null $direction
-     * @param string|null $indexBy
-     *
+	 * @param string|null $sort
+	 * @param string|null $direction
+	 * @param string|null $indexBy
+	 *
 	 * @access public
 	 * @return array objects
      *
