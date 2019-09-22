@@ -76,10 +76,16 @@ trait Get {
 	/**
 	 * Get all
 	 *
+     * @param string|null $sort
+     * @param string|null $direction
+     * @param string|null $indexBy
+     *
 	 * @access public
 	 * @return array objects
+     *
+     * @throws \Exception
 	 */
-	public static function get_all($sort = null, $direction = null) {
+	public static function get_all($sort = null, $direction = null, $indexBy = null) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
@@ -104,7 +110,12 @@ trait Get {
 
 		$objects = [];
 		foreach ($ids as $id) {
-			$objects[] = self::get_by_id($id);
+			$object = self::get_by_id($id);
+			if($indexBy !== null) {
+				$objects[$object->{$indexBy}] = $object;
+			} else {
+				$objects[] = $object;
+			}
 		}
 
 		return $objects;
