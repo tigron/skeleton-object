@@ -82,8 +82,8 @@ trait Get {
 	 *
 	 * @access public
 	 * @return array objects
-     *
-     * @throws \Exception
+	 *
+	 * @throws \Exception
 	 */
 	public static function get_all($sort = null, $direction = null, $indexBy = null) {
 		$table = self::trait_get_database_table();
