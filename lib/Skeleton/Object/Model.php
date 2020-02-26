@@ -186,6 +186,10 @@ trait Model {
 			}
 		}
 
+		if (substr($key, -3) === '_id' and empty($value)) {
+			$value = null;
+		}
+
 		$this->details[$key] = $value;
 		if (isset($this->child_details)) {
 			$this->child_details[$key] = $value;
