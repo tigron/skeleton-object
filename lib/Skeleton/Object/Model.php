@@ -218,8 +218,8 @@ trait Model {
 		}
 
 		if ($this->object_text_cache[$key] != $value) {
+			$this->object_text_updated[$key] = $this->$key;
 			$this->object_text_cache[$key] = $value;
-			$this->object_text_updated[$key] = $value;
 		}
 	}
 
