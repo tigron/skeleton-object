@@ -101,9 +101,12 @@ trait Model {
 		$object = new $classname();
 		$object->id = $this->id;
 		$object->details = $this->details;
+
 		if (isset($object->child_details) and isset($this->child_details)) {
 			$object->child_details = $this->child_details;
+			unset($object->child_details['id']);
 		}
+
 		$object->child_casted_object = $this;
 		$classname_field = self::$class_configuration['child_classname_field'];
 		$object->$classname_field = $classname;
