@@ -68,7 +68,7 @@ trait Model {
 	 * @param int $id
 	 */
 	public function __construct($id = null) {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['child_classname_field'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
 			$this->details[$classname_field] = get_class($this);
 		}
@@ -102,7 +102,7 @@ trait Model {
 		$object->id = $this->id;
 		$object->details = $this->details;
 
-		if (isset($object->child_details) and isset($this->child_details)) {
+		if (isset($object->child_details) && isset($this->child_details)) {
 			$object->child_details = $this->child_details;
 			unset($object->child_details['id']);
 		}
@@ -137,7 +137,7 @@ trait Model {
 		$this->details = $details;
 		$this->reset_dirty_fields();
 
-		if (method_exists($this, 'trait_get_child_details') and is_callable([$this, 'trait_get_child_details'])) {
+		if (method_exists($this, 'trait_get_child_details') && is_callable([$this, 'trait_get_child_details'])) {
 			$this->trait_get_child_details();
 		}
 	}
@@ -151,7 +151,7 @@ trait Model {
 	 */
 	public function __set($key, $value) {
 		// Check if the key we want to set exists in the disallow_set variable
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['disallow_set'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['disallow_set'])) {
 			if (is_array(self::$class_configuration['disallow_set'])) {
 				if (in_array($key, self::$class_configuration['disallow_set'])) {
 					throw new \Exception('Can not set ' . $key . ' directly');
@@ -161,7 +161,7 @@ trait Model {
 			}
 		}
 
-		if (is_object($value) AND property_exists($value, 'id')) {
+		if (is_object($value) && property_exists($value, 'id')) {
 			$key = $key . '_id';
 			$this->$key = $value->id;
 			return;
@@ -174,7 +174,7 @@ trait Model {
 			}
 		}
 
-		if (array_key_exists($key, $this->details) AND $this->details[$key] != $value) {
+		if (array_key_exists($key, $this->details) && $this->details[$key] != $value) {
 			// A new value is set, let's tag it as dirty
 
 			if (!isset($this->dirty_fields[$key])) {
@@ -182,14 +182,14 @@ trait Model {
 			}
 		}
 
-		if (isset($this->child_details) and array_key_exists($key, $this->child_details) and $this->child_details[$key] != $value) {
+		if (isset($this->child_details) && array_key_exists($key, $this->child_details) && $this->child_details[$key] != $value) {
 
 			if (!isset($this->dirty_fields[$key])) {
 				$this->dirty_fields[$key] = $this->child_details[$key];
 			}
 		}
 
-		if (substr($key, -3) === '_id' and empty($value)) {
+		if (substr($key, -3) === '_id' && empty($value)) {
 			$value = null;
 		}
 
@@ -244,7 +244,7 @@ trait Model {
 			throw new \Exception('Incorrect text field:' . $label);
 		}
 
-		if ($this->id === null AND !isset($this->object_text_cache[$key])) {
+		if ($this->id === null && !isset($this->object_text_cache[$key])) {
 			$this->object_text_cache[$key] = '';
 		}
 
@@ -265,19 +265,19 @@ trait Model {
 	 * @return mixed $value
 	 */
 	public function __get($key) {
-		if (isset($this->details[strtolower($key) . '_id']) AND class_exists($key)) {
+		if (isset($this->details[strtolower($key) . '_id']) && class_exists($key)) {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (is_array($this->details) and array_key_exists($key, $this->details)) {
+		if (is_array($this->details) && array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
 
-		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
+		if (isset($this->child_details) && array_key_exists($key, $this->child_details)) {
 			return $this->child_details[$key];
 		}
 
-		if (isset($this->child_details) and isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+		if (isset($this->child_details) && isset($this->child_details[strtolower($key) . '_id']) && class_exists($key)) {
 			return $key::get_by_id($this->child_details[strtolower($key) . '_id']);
 		}
 
@@ -298,11 +298,11 @@ trait Model {
 	 * @return bool $isset
 	 */
 	public function __isset($key) {
-		if (isset($this->details[strtolower($key) . '_id']) AND class_exists($key)) {
+		if (isset($this->details[strtolower($key) . '_id']) && class_exists($key)) {
 			return true;
 		}
 
-		if (is_array($this->details) and array_key_exists($key, $this->details)) {
+		if (is_array($this->details) && array_key_exists($key, $this->details)) {
 			return true;
 		}
 
@@ -318,11 +318,11 @@ trait Model {
 			}
 		}
 
-		if (isset($this->child_details) AND isset($this->child_details[strtolower($key) . '_id']) AND class_exists($key)) {
+		if (isset($this->child_details) && isset($this->child_details[strtolower($key) . '_id']) && class_exists($key)) {
 			return true;
 		}
 
-		if (isset($this->child_details) and array_key_exists($key, $this->child_details)) {
+		if (isset($this->child_details) && array_key_exists($key, $this->child_details)) {
 			return true;
 		}
 
@@ -342,7 +342,7 @@ trait Model {
 			return false;
 		}
 
-		if (!is_null($key) AND !array_key_exists($key, $dirty_fields)) {
+		if (!is_null($key) && !array_key_exists($key, $dirty_fields)) {
 			return false;
 		}
 
@@ -419,7 +419,7 @@ trait Model {
 	 * @return Database $database
 	 */
 	protected static function trait_get_database() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_config_name'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['database_config_name'])) {
 			$db = Database::get(self::$class_configuration['database_config_name']);
 		} else {
 			$db = Database::get();
@@ -434,7 +434,7 @@ trait Model {
 	 * @return string $table
 	 */
 	public static function trait_get_database_table() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['database_table'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['database_table'])) {
 			return self::$class_configuration['database_table'];
 		} else {
 			return strtolower((new \ReflectionClass(get_class()))->getShortName());
@@ -448,7 +448,7 @@ trait Model {
 	 * @return string $id
 	 */
 	protected static function trait_get_table_field_id() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_id'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_id'])) {
 			return self::$class_configuration['table_field_id'];
 		} else {
 			return 'id';
@@ -462,7 +462,7 @@ trait Model {
 	 * @return string $created
 	 */
 	private static function trait_get_table_field_created() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_created'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_created'])) {
 			return self::$class_configuration['table_field_created'];
 		} else {
 			return 'created';
@@ -476,7 +476,7 @@ trait Model {
 	 * @return string $updated
 	 */
 	private static function trait_get_table_field_updated() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_updated'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_updated'])) {
 			return self::$class_configuration['table_field_updated'];
 		} else {
 			return 'updated';
@@ -490,7 +490,7 @@ trait Model {
 	 * @return string $archived
 	 */
 	private static function trait_get_table_field_archived() {
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['table_field_archived'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_archived'])) {
 			return self::$class_configuration['table_field_archived'];
 		} else {
 			return 'archived';
@@ -522,5 +522,16 @@ trait Model {
 			}
 		}
 		return $joins;
+	}
+
+	/**
+	 * Get cache key
+	 *
+	 * @access public
+	 * @param mixed $object
+	 * @return string $key
+	 */
+	public static function trait_get_cache_key($object) {
+		return get_class($object) . '_' . $object->id;
 	}
 }

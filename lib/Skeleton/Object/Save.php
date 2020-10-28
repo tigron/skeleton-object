@@ -33,7 +33,7 @@ trait Save {
 	 */
 	public function save($validate = true) {
 		// If we have a validate() method, execute it
-		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
+		if (method_exists($this, 'validate') && is_callable([$this, 'validate']) && $validate) {
 			$errors = [];
 
 			if ($this->validate($errors) === false) {
@@ -44,7 +44,7 @@ trait Save {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
-		if (!isset($this->id) OR $this->id === null) {
+		if (!isset($this->id) || $this->id === null) {
 			if (!isset($this->details[ self::trait_get_table_field_created()])) {
 				$this->details[ self::trait_get_table_field_created() ] = date('Y-m-d H:i:s');
 			}
@@ -52,15 +52,15 @@ trait Save {
 			$this->details[ self::trait_get_table_field_updated() ] = date('Y-m-d H:i:s');
 		}
 
-		if (method_exists($this, 'generate_slug') AND is_callable([$this, 'generate_slug']) AND (\Skeleton\Object\Config::$auto_update_slug === true OR !isset($this->details['slug']) OR $this->details['slug'] == '')) {
+		if (method_exists($this, 'generate_slug') && is_callable([$this, 'generate_slug']) && (\Skeleton\Object\Config::$auto_update_slug === true || !isset($this->details['slug']) || $this->details['slug'] == '')) {
 			$this->details['slug'] = $this->generate_slug();
 		}
 
-		if (method_exists($this, 'generate_uuid') AND is_callable([$this, 'generate_uuid']) AND (!isset($this->details['uuid']) OR $this->details['uuid'] == '')) {
+		if (method_exists($this, 'generate_uuid') && is_callable([$this, 'generate_uuid']) && (!isset($this->details['uuid']) || $this->details['uuid'] == '')) {
 			$this->details['uuid'] = $this->generate_uuid();
 		}
 
-		if (!isset($this->id) OR $this->id === null) {
+		if (!isset($this->id) || $this->id === null) {
 			$db->insert($table, $this->details);
 			$this->id = $db->get_insert_id($table, self::trait_get_table_field_id());
 
@@ -81,13 +81,13 @@ trait Save {
 			$object_text->save();
 
 			if (self::trait_cache_enabled()) {
-				$key = get_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $language->name_short;
+				$key = \Skeleton\I18n\Object\Text::trait_get_cache_key($object_text);
 				self::cache_delete($key);
 				self::cache_set($key, $object_text);
 			}
 		}
 
-		if (method_exists($this, 'trait_child_save') and is_callable([$this, 'trait_child_save'])) {
+		if (method_exists($this, 'trait_child_save') && is_callable([$this, 'trait_child_save'])) {
 			$this->trait_child_save();
 		}
 
@@ -101,8 +101,8 @@ trait Save {
 		$this->get_details();
 
 		if (self::trait_cache_enabled()) {
-			self::cache_delete(get_class() . '_' . $this->id);
-			self::cache_set(get_class() . '_' . $this->id, $this);
+			self::cache_delete(self::trait_get_cache_key($this));
+			self::cache_set(self::trait_get_cache_key($this), $this);
 		}
 
 	}

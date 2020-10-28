@@ -39,7 +39,7 @@ trait Get {
 	 * Get by id
 	 *
 	 * @access public
-	 * @parm int $id
+	 * @param int $id
 	 * @return object
 	 */
 	public static function get_by_id($id) {
@@ -49,12 +49,12 @@ trait Get {
 
 		if (self::trait_cache_enabled()) {
 			try {
-				$object = self::cache_get(get_called_class() . '_' . $id);
+				$object = self::cache_get(self::trait_get_cache_key($object));
 				return $object;
-			} catch (\Exception $e) {	}
+			} catch (\Exception $e) {}
 		}
 
-		if (property_exists(get_called_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
+		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
 			$table = self::trait_get_database_table();
 			$db = self::trait_get_database();
@@ -68,7 +68,7 @@ trait Get {
 
 		$object = new $classname($id);
 		if (self::trait_cache_enabled()) {
-			self::cache_set(get_called_class() . '_' . $id, $object);
+			self::cache_set(self::trait_get_cache_key($object), $object);
 		}
 
 		return $object;
@@ -94,14 +94,16 @@ trait Get {
 			$where = ' AND ' . $field_archived . ' IS NULL';
 		}
 
-		if (is_null($sort)) {
-			$ids = $db->get_column('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE 1=1' . $where, []);
-		} else {
-			if (is_null($direction)) {
+		$query = 'SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE 1=1' . $where;
+		if ($sort !== null) {
+			if ($direction === null) {
 				$direction = 'ASC';
 			}
-			$ids = $db->get_column('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE 1=1' . $where . ' ORDER BY ' . $sort . ' ' . $direction);
+
+			$query .= ' ORDER BY ' . $sort . ' ' . $direction;
 		}
+
+		$ids = $db->get_column($query, []);
 
 		$objects = [];
 		foreach ($ids as $id) {
