@@ -14,9 +14,9 @@ trait Uuid {
 	/**
 	 * Generate a uuid
 	 *
-	 * @access private
+	 * @access protected
 	 */
-	private function generate_uuid($version = 4) {
+	protected function generate_uuid($version = 4) {
 		do {
 			$hash = bin2hex(random_bytes(16));
 
