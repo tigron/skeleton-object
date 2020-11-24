@@ -1,26 +1,26 @@
 {
-    "name": "tigron/skeleton-object",
-    "description": "Tigron Skeleton object traits",
-    "type": "library",
-    "require": {
-        "php": ">=7.0.0",
-        "cocur/slugify": "1.3"
-    },
-    "require-dev": {
-        "tigron/skeleton-database": "dev-master"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tigron BVBA",
-            "email": "support@tigron.be"
-        }
-    ],
-    "support": {
-        "source": "https://github.com/tigron/skeleton-object",
-        "issues": "https://github.com/tigron/skeleton-object/issues"
-    },
-    "autoload": {
-        "psr-4": { "Skeleton\\Object\\": "lib/Skeleton/Object/" }
-    }
+	"name": "tigron/skeleton-object",
+	"description": "Tigron Skeleton object traits",
+	"type": "library",
+	"require": {
+		"php": ">=7.0.0",
+		"ext-intl": "*",
+	},
+	"require-dev": {
+		"tigron/skeleton-database": "dev-master"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tigron BVBA",
+			"email": "support@tigron.be"
+		}
+	],
+	"support": {
+		"source": "https://github.com/tigron/skeleton-object",
+		"issues": "https://github.com/tigron/skeleton-object/issues"
+	},
+	"autoload": {
+		"psr-4": { "Skeleton\\Object\\": "lib/Skeleton/Object/" }
+	}
 }

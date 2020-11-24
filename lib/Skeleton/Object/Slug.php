@@ -1,6 +1,6 @@
 <?php
 /**
- * trait: Save
+ * trait: Slug
  *
  * @author Christophe Gosiau <christophe.gosiau@tigron.be>
  * @author Gerry Demaret <gerry.demaret@tigron.be>
@@ -9,7 +9,6 @@
 
 namespace Skeleton\Object;
 
-use Cocur\Slugify\Slugify;
 use Tigron\Skeleton\I18n\Language;
 
 trait Slug {
@@ -18,9 +17,12 @@ trait Slug {
 	 * Generate a slug
 	 *
 	 * @access private
+	 * @param bool $unique
+	 * @return string $slug
 	 */
-	private function generate_slug($append = 0, $unique = true) {
+	private function generate_slug($unique = true) {
 		$sluggable_field = 'name'; // default
+
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['sluggable'])) {
 			$sluggable_field = self::$class_configuration['sluggable'];
 		}
@@ -42,36 +44,40 @@ trait Slug {
 			return $this->details['slug'];
 		}
 
-		$slugify = new Slugify();
-		$slug = $slugify->slugify($name);
+		// "Any-Latin": transliterate to latin while preserving what we can
+		// "NFD; [:Nonspacing Mark:] Remove; NFC": move accents into separate characters, remove the accents
+		// "Lower()": lowercase the end result
+		$slug = transliterator_transliterate('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; Lower()', $name);
+
+		// "[:Punctuation:] Remove": replace any character in the unicode punctuation category with dashes
+		$slug = preg_replace('/\p{P}/', '-', $slug);
+
+		// Replace leftover non-alphanumerics with dashes
+		$slug = preg_replace('/[^A-Za-z0-9 ]/', '-', $slug);
+
+		// Replace spaces and consecutive dashes with single dashes
+		$slug = preg_replace('/[-\s]+/', '-', $slug);
+
+		// Remove any leading or trailing dashes
+		$slug = trim($slug, '-');
 
 		if ($unique === false) {
 			return $slug;
 		}
 
-		if ($append != 0) {
-			$slug .= '-' . $append;
-		}
+		while (true) {
+			try {
+				$object = self::get_by_slug($slug);
 
-		$slug_exist = false;
-		try {
-			$object = self::get_by_slug($slug);
-			if ($this->id === null) {
-				$slug_exist = true;
+				if ($this->id === null || $this->id !== $object->id) {
+					$slug = $slug . bin2hex(random_bytes(1));
+				}
+			} catch (\Exception $e) {
+				// If the slug was not found, we're good to go
+				break;
 			}
-
-			if ($this->id != $object->id) {
-				$slug_exist = true;
-			}
-
-		} catch (\Exception $e) {
-			$slug_exist = false;
 		}
 
-		if ($slug_exist) {
-			++$append;
-			return $this->generate_slug($append);
-		}
 		return $slug;
 	}
 
@@ -90,6 +96,7 @@ trait Slug {
 		if ($id === null) {
 			throw new \Exception('Object not found');
 		}
+
 		return self::get_by_id($id);
 	}
 }
