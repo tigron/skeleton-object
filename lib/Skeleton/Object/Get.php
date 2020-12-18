@@ -49,7 +49,7 @@ trait Get {
 
 		if (self::trait_cache_enabled()) {
 			try {
-				$object = self::cache_get(self::trait_get_cache_key($object));
+				$object = self::cache_get(get_called_class() . '_' . $id);
 				return $object;
 			} catch (\Exception $e) {}
 		}
