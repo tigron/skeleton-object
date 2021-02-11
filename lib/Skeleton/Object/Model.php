@@ -389,15 +389,19 @@ trait Model {
 	 * @return bool $cache_enabled
 	 */
 	private static function trait_cache_enabled() {
-		if (!method_exists(get_called_class(), 'cache_get')) {
-			return false;
-		}
-
 		if (Config::$cache_handler === false) {
 			return false;
 		}
 
-		return true;
+		if (method_exists(get_called_class(), 'cache_get')) {
+			return true;
+		}
+
+		if (method_exists(get_parent_class(get_called_class()), 'cache_get')) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -525,6 +529,25 @@ trait Model {
 	}
 
 	/**
+	 * Get cache prefix
+	 *
+	 * @access public
+	 * @param mixed $object
+	 * @return string $key
+	 */
+	public static function trait_get_cache_prefix() {
+		if (method_exists(get_parent_class(get_called_class()), 'cache_get')) {
+			return get_parent_class(get_called_class());
+		}
+
+		if (method_exists(get_called_class(), 'cache_get')) {
+			return get_called_class();
+		}
+
+		throw new Exception('Cache not available');
+	}
+
+	/**
 	 * Get cache key
 	 *
 	 * @access public
@@ -532,6 +555,6 @@ trait Model {
 	 * @return string $key
 	 */
 	public static function trait_get_cache_key($object) {
-		return get_class($object) . '_' . $object->id;
+		return get_called_class()::trait_get_cache_prefix() . '_' . $object->id;
 	}
 }

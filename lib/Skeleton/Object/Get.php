@@ -48,10 +48,11 @@ trait Get {
 		}
 
 		if (self::trait_cache_enabled()) {
+			$prefix = get_called_class()::trait_get_cache_prefix();
 			try {
-				$object = self::cache_get(get_called_class() . '_' . $id);
+				$object = self::cache_get($prefix . '_' . $id);
 				return $object;
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) { }
 		}
 
 		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
@@ -68,7 +69,7 @@ trait Get {
 
 		$object = new $classname($id);
 		if (self::trait_cache_enabled()) {
-			self::cache_set(self::trait_get_cache_key($object), $object);
+			self::cache_set(get_called_class()::trait_get_cache_key($object), $object);
 		}
 
 		return $object;

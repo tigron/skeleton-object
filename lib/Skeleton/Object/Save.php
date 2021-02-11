@@ -101,8 +101,8 @@ trait Save {
 		$this->get_details();
 
 		if (self::trait_cache_enabled()) {
-			self::cache_delete(self::trait_get_cache_key($this));
-			self::cache_set(self::trait_get_cache_key($this), $this);
+			self::cache_delete(get_called_class()::trait_get_cache_key($this));
+			self::cache_set(get_called_class()::trait_get_cache_key($this), $this);
 		}
 
 	}
