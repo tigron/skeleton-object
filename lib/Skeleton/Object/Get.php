@@ -47,10 +47,10 @@ trait Get {
 			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
 
-		if (self::trait_cache_enabled()) {
+		if (get_called_class()::trait_cache_enabled()) {
 			$prefix = get_called_class()::trait_get_cache_prefix();
 			try {
-				$object = self::cache_get($prefix . '_' . $id);
+				$object = get_called_class()::cache_get($prefix . '_' . $id);
 				return $object;
 			} catch (\Exception $e) { }
 		}
@@ -68,8 +68,8 @@ trait Get {
 		}
 
 		$object = new $classname($id);
-		if (self::trait_cache_enabled()) {
-			self::cache_set(get_called_class()::trait_get_cache_key($object), $object);
+		if (get_called_class()::trait_cache_enabled()) {
+			get_called_class()::cache_set(get_called_class()::trait_get_cache_key($object), $object);
 		}
 
 		return $object;

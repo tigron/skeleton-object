@@ -80,10 +80,10 @@ trait Save {
 			$object_text->content = $this->object_text_cache[$key];
 			$object_text->save();
 
-			if (self::trait_cache_enabled()) {
+			if (get_called_class()::trait_cache_enabled()) {
 				$key = \Skeleton\I18n\Object\Text::trait_get_cache_key($object_text);
-				self::cache_delete($key);
-				self::cache_set($key, $object_text);
+				get_called_class()::cache_delete($key);
+				get_called_class()::cache_set($key, $object_text);
 			}
 		}
 
@@ -100,9 +100,9 @@ trait Save {
 
 		$this->get_details();
 
-		if (self::trait_cache_enabled()) {
-			self::cache_delete(get_called_class()::trait_get_cache_key($this));
-			self::cache_set(get_called_class()::trait_get_cache_key($this), $this);
+		if (get_called_class()::trait_cache_enabled()) {
+			get_called_class()::cache_delete(get_called_class()::trait_get_cache_key($this));
+			get_called_class()::cache_set(get_called_class()::trait_get_cache_key($this), $this);
 		}
 
 	}

@@ -544,7 +544,7 @@ trait Model {
 			return get_called_class();
 		}
 
-		throw new Exception('Cache not available');
+		throw new \Exception('Cache not available');
 	}
 
 	/**
