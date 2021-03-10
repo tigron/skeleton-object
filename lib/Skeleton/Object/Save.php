@@ -49,7 +49,9 @@ trait Save {
 				$this->details[ self::trait_get_table_field_created() ] = date('Y-m-d H:i:s');
 			}
 		} else {
-			$this->details[ self::trait_get_table_field_updated() ] = date('Y-m-d H:i:s');
+			if (!$this->is_dirty( self::trait_get_table_field_updated() )) {
+				$this->details[ self::trait_get_table_field_updated() ] = date('Y-m-d H:i:s');
+			}
 		}
 
 		if (method_exists($this, 'generate_slug') && is_callable([$this, 'generate_slug']) && (\Skeleton\Object\Config::$auto_update_slug === true || !isset($this->details['slug']) || $this->details['slug'] == '')) {
