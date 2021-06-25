@@ -94,7 +94,7 @@ trait Save {
 		}
 
 		if ($this->child_casted_object !== null) {
-			if (is_callable($this->child_casted_object, 'trait_child_delete')) {
+			if (is_callable([ $this->child_casted_object, 'trait_child_delete' ])) {
 				$this->child_casted_object->trait_child_delete();
 			}
 			$this->child_casted_object = null;
