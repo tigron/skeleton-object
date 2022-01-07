@@ -174,19 +174,24 @@ trait Model {
 			}
 		}
 
-		if (array_key_exists($key, $this->details) && $this->details[$key] != $value) {
-			// A new value is set, let's tag it as dirty
-
-			if (!isset($this->dirty_fields[$key])) {
-				$this->dirty_fields[$key] = $this->details[$key];
-			}
+		// If a new value is set, let's tag it as dirty
+		if (
+			empty($this->id) === false
+			&& array_key_exists($key, $this->details)
+			&& $this->details[$key] != $value
+			&& !isset($this->dirty_fields[$key])
+		) {
+			$this->dirty_fields[$key] = $this->details[$key];
 		}
 
-		if (isset($this->child_details) && array_key_exists($key, $this->child_details) && $this->child_details[$key] != $value) {
-
-			if (!isset($this->dirty_fields[$key])) {
-				$this->dirty_fields[$key] = $this->child_details[$key];
-			}
+		if (
+			empty($this->id) === false
+			&& isset($this->child_details)
+			&& array_key_exists($key, $this->child_details)
+			&& $this->child_details[$key] != $value
+			&& !isset($this->dirty_fields[$key])
+		) {
+			$this->dirty_fields[$key] = $this->child_details[$key];
 		}
 
 		if (substr($key, -3) === '_id' && empty($value)) {
