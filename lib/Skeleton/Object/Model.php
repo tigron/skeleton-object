@@ -274,11 +274,11 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (is_array($this->details) && isset($this->details[$key])) {
+		if (is_array($this->details) && array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
 
-		if (isset($this->child_details) && isset($this->child_details[$key])) {
+		if (isset($this->child_details) && array_key_exists($key, $this->child_details)) {
 			return $this->child_details[$key];
 		}
 
