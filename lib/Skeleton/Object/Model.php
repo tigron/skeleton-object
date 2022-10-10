@@ -256,7 +256,14 @@ trait Model {
 		if (!isset($this->object_text_cache[$key])) {
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$language = $language_interface::get_by_name_short($language);
-			$this->object_text_cache[$key] = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language)->content;
+			// Check if the object text label can be found, otherwise return empty string
+			$object_text_label = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language);
+			if ($object_text_label === null) {
+				$this->object_text_cache[$key] = '';
+			} else {
+				$this->object_text_cache[$key] = $object_text_label->content;
+			}
+
 		}
 
 		return $this->object_text_cache[$key];
