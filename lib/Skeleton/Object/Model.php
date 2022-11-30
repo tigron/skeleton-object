@@ -256,14 +256,7 @@ trait Model {
 		if (!isset($this->object_text_cache[$key])) {
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$language = $language_interface::get_by_name_short($language);
-			// Check if the object text label can be found, otherwise return empty string
-			$object_text_label = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language);
-			if ($object_text_label === null) {
-				$this->object_text_cache[$key] = '';
-			} else {
-				$this->object_text_cache[$key] = $object_text_label->content;
-			}
-
+			$this->object_text_cache[$key] = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language)->content;
 		}
 
 		return $this->object_text_cache[$key];
@@ -314,7 +307,7 @@ trait Model {
 			return true;
 		}
 
-		if (is_array($this->details) && isset($this->details[$key])) {
+		if (is_array($this->details) && array_key_exists($key, $this->details)) {
 			return true;
 		}
 
@@ -334,7 +327,7 @@ trait Model {
 			return true;
 		}
 
-		if (isset($this->child_details) && isset($this->child_details[$key])) {
+		if (isset($this->child_details) && array_key_exists($key, $this->child_details)) {
 			return true;
 		}
 
