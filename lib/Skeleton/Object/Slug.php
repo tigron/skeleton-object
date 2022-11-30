@@ -30,7 +30,9 @@ trait Slug {
 		if (isset($this->details[$sluggable_field])) {
 			$name = $this->details[$sluggable_field];
 		} elseif (isset(self::$object_text_fields) AND in_array($sluggable_field, self::$object_text_fields)) {
-			$sluggable_field = 'text_' . \Skeleton\I18n\Config::$base_language . '_' . $sluggable_field;
+			$language_interface = \Skeleton\I18n\Config::$language_interface;
+			$base_language = $language_interface::get_base();
+			$sluggable_field = 'text_' . $base_language->name_short . '_' . $sluggable_field;
 			if (isset($this->$sluggable_field) AND $this->$sluggable_field != '') {
 				$name = $this->$sluggable_field;
 			} else {
