@@ -178,7 +178,7 @@ trait Model {
 		if (
 			empty($this->id) === false
 			&& array_key_exists($key, $this->details)
-			&& $this->details[$key] != $value
+			&& $this->details[$key] !== $value
 			&& !isset($this->dirty_fields[$key])
 		) {
 			$this->dirty_fields[$key] = $this->details[$key];
@@ -188,7 +188,7 @@ trait Model {
 			empty($this->id) === false
 			&& isset($this->child_details)
 			&& array_key_exists($key, $this->child_details)
-			&& $this->child_details[$key] != $value
+			&& $this->child_details[$key] !== $value
 			&& !isset($this->dirty_fields[$key])
 		) {
 			$this->dirty_fields[$key] = $this->child_details[$key];
