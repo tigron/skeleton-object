@@ -167,35 +167,36 @@ trait Model {
 			return;
 		}
 
-		if (isset(self::$object_text_fields)) {
-			if (strpos($key, 'text_') === 0) {
-				$this->trait_set_object_text($key, $value);
-				return;
-			}
+		if (isset(self::$object_text_fields) === true && strpos($key, 'text_') === 0) {
+			$this->trait_set_object_text($key, $value);
+			return;
+		}
+
+		if (substr($key, -3) === '_id' && empty($value) === true) {
+			$value = null;
 		}
 
 		// If a new value is set, let's tag it as dirty
-		if (
-			empty($this->id) === false
-			&& array_key_exists($key, $this->details)
-			&& $this->details[$key] !== $value
-			&& !isset($this->dirty_fields[$key])
-		) {
-			$this->dirty_fields[$key] = $this->details[$key];
-		}
+		if (isset($this->dirty_fields[$key]) === false && empty($this->id) === false) {
+			if (array_key_exists($key, $this->details)) {
+				if (is_numeric($value) === true && $this->details[$key] != $value) {
+					$this->dirty_fields[$key] = $this->details[$key];
+				}
 
-		if (
-			empty($this->id) === false
-			&& isset($this->child_details)
-			&& array_key_exists($key, $this->child_details)
-			&& $this->child_details[$key] !== $value
-			&& !isset($this->dirty_fields[$key])
-		) {
-			$this->dirty_fields[$key] = $this->child_details[$key];
-		}
+				if (is_numeric($value) === false && $this->details[$key] !== $value) {
+					$this->dirty_fields[$key] = $this->details[$key];
+				}
+			}
 
-		if (substr($key, -3) === '_id' && empty($value)) {
-			$value = null;
+			if (isset($this->child_details) === true && array_key_exists($key, $this->child_details) === true) {
+				if (is_numeric($value) === true && $this->child_details[$key] != $value) {
+					$this->dirty_fields[$key] = $this->child_details[$key];
+				}
+
+				if (is_numeric($value) === false && $this->child_details[$key] !== $value) {
+					$this->dirty_fields[$key] = $this->child_details[$key];
+				}
+			}
 		}
 
 		$this->details[$key] = $value;
