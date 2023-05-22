@@ -406,8 +406,16 @@ trait Model {
 			return false;
 		}
 
+		if (get_called_class() === false) {
+			return false;
+		}
+
 		if (method_exists(get_called_class(), 'cache_get')) {
 			return true;
+		}
+
+		if (get_parent_class(get_called_class()) === false) {
+			return false;
 		}
 
 		if (method_exists(get_parent_class(get_called_class()), 'cache_get')) {
