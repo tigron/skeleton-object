@@ -54,7 +54,10 @@ trait Save {
 			}
 		}
 
-		if (method_exists($this, 'generate_slug') && is_callable([$this, 'generate_slug']) && (\Skeleton\Object\Config::$auto_update_slug === true || !isset($this->details['slug']) || $this->details['slug'] == '')) {
+		if (
+			method_exists($this, 'generate_slug')
+			&& is_callable([$this, 'generate_slug'])
+		) {
 			$this->details['slug'] = $this->generate_slug();
 		}
 

@@ -14,59 +14,60 @@ use Tigron\Skeleton\I18n\Language;
 trait Slug {
 
 	/**
-	 * Generate a slug
+	 * Get base for slug
 	 *
 	 * @access private
-	 * @param bool $unique
-	 * @return string $slug
+	 * @return string $slug_base
 	 */
-	private function generate_slug($unique = true) {
-		$sluggable_field = 'name'; // default
+	private function trait_slug_get_base(): string {
+		$sluggable_field = 'name';
 
 		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['sluggable'])) {
 			$sluggable_field = self::$class_configuration['sluggable'];
 		}
 
 		if (isset($this->details[$sluggable_field])) {
-			$name = $this->details[$sluggable_field];
-		} elseif (isset(self::$object_text_fields) AND in_array($sluggable_field, self::$object_text_fields)) {
+			return $this->details[$sluggable_field];
+		}
+
+		if (isset(self::$object_text_fields) AND in_array($sluggable_field, self::$object_text_fields)) {
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$base_language = $language_interface::get_base();
 			$sluggable_field = 'text_' . $base_language->name_short . '_' . $sluggable_field;
-			if (isset($this->$sluggable_field) AND $this->$sluggable_field != '') {
-				$name = $this->$sluggable_field;
-			} else {
-				throw new \Exception('No base found to generate slug');
+			if (isset($this->$sluggable_field)) {
+				return $this->$sluggable_field;
 			}
-		} else {
-			throw new \Exception('No base found to generate slug');
 		}
 
-		if (isset($this->id) AND $this->is_dirty($sluggable_field) === false and !empty($this->details['slug'])) {
-			return $this->details['slug'];
-		}
+		throw new \Exception('No base found to generate slug');
+	}
 
-		// "Any-Latin": transliterate to latin while preserving what we can
-		// "NFD; [:Nonspacing Mark:] Remove; NFC": move accents into separate characters, remove the accents
-		// "Lower()": lowercase the end result
-		$slug = transliterator_transliterate('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; Lower()', $name);
+	/**
+	 * Regenerate slug
+	 * Indicate if the slug should be regenerated
+	 *
+	 * @access private
+	 * @return bool $regenerate
+	 */
+	private function trait_slug_regenerate(): bool {
+		/**
+		 * We believe slugs should not be regenerated. They serve a specific
+		 * purpose: provide a permanent url. Changing them could lead to dead
+		 * links.
+		 * However, it could be that you do want to regenerate the slug (ex
+		 * based on user input or dirty fields).
+		 */
+		return false;
+	}
 
-		// "[:Punctuation:] Remove": replace any character in the unicode punctuation category with dashes
-		$slug = preg_replace('/\p{P}/', '-', $slug);
-
-		// Replace leftover non-alphanumerics with dashes
-		$slug = preg_replace('/[^A-Za-z0-9 ]/', '-', $slug);
-
-		// Replace spaces and consecutive dashes with single dashes
-		$slug = preg_replace('/[-\s]+/', '-', $slug);
-
-		// Remove any leading or trailing dashes
-		$slug = trim($slug, '-');
-
-		if ($unique === false) {
-			return $slug;
-		}
-
+	/**
+	 * Make slug unique
+	 *
+	 * @access private
+	 * @param string $slug
+	 * @return string $unique_slug
+	 */
+	private function trait_slug_unique($slug): string {
 		while (true) {
 			try {
 				$object = self::get_by_slug($slug);
@@ -81,6 +82,54 @@ trait Slug {
 		}
 
 		return $slug;
+	}
+
+	/**
+	 * Generate a slug
+	 *
+	 * @access private
+	 * @return string $slug
+	 */
+	private function generate_slug() {
+		$slug_base = $this->trait_slug_get_base();
+
+		if (empty($slug_base)) {
+			throw new \Exception('Slug base cannot be empty');
+		}
+
+		if (isset($this->id) AND $this->trait_slug_regenerate() === false and !empty($this->details['slug'])) {
+			return $this->details['slug'];
+		}
+
+		// "Any-Latin": transliterate to latin while preserving what we can
+		// "NFD; [:Nonspacing Mark:] Remove; NFC": move accents into separate characters, remove the accents
+		// "Lower()": lowercase the end result
+		$slug = transliterator_transliterate('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; Lower()', $slug_base);
+
+		// "[:Punctuation:] Remove": replace any character in the unicode punctuation category with dashes
+		$slug = preg_replace('/\p{P}/', '-', $slug);
+
+		// Replace leftover non-alphanumerics with dashes
+		$slug = preg_replace('/[^A-Za-z0-9 ]/', '-', $slug);
+
+		// Replace spaces and consecutive dashes with single dashes
+		$slug = preg_replace('/[-\s]+/', '-', $slug);
+
+		// Remove any leading or trailing dashes
+		$slug = trim($slug, '-');
+
+		/**
+		 * If slug regenerate was enabled, we could end up generating the
+		 * same slug as we already had
+		 */
+		if (isset($this->details['slug']) and $this->details['slug'] == $slug) {
+			return $this->details['slug'];
+		}
+
+		/**
+		 * Make the slug unique
+		 */
+		return $this->trait_slug_unique($slug);
 	}
 
 	/**

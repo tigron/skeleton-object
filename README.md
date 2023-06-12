@@ -121,13 +121,34 @@ Optional parameters:
 
 ## Slug trait
 
-When using the Slug trait, it is possible to auto update the slug when
-saving the object (default is false).
+The Slug trait creates an easy-to-read string that can be used in a URL to
+identify a specific page.
+Slug creation is done in 3 steps:
 
-    /**
-     * Set the auto update slug flag
-     */
-    \Skeleton\Object\Config::$auto_update_slug = true;
+  1. Check if the slug needs to be generated or regenerated
+
+- If save() is requested on a new object, slug creation will proceed
+- trait_slug_regenerate(): bool is called to check if an existing slug needs to
+be regenerated. By default trait_slug_regenerate() returns false and slug is
+never regenerated.
+
+  2. Find a base string
+
+In order to find the base string, the method trait_slug_get_base(): string is
+called. By default it searches for the value in property 'name' or property
+'text_en_name' where 'en' is replaced by the base language.
+The field can be specified in $class_configuration['sluggable'].
+
+  3. Generate the slug from base string
+
+The base string is converted into lowercase ASCII characters. Spaces are
+replaced by '-'.
+
+  4. Make the slug unique
+
+To make the slug unique, the method trait_slug_unique($slug): $unique is called.
+If a slug already exists, this methods appends hexadecimal values to the slug
+until the slug becomes unique.
 
 ## UUID trait
 
