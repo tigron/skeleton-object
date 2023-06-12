@@ -43,13 +43,13 @@ trait Slug {
 	}
 
 	/**
-	 * Regenerate slug
+	 * Does the slug needs slug
 	 * Indicate if the slug should be regenerated
 	 *
 	 * @access private
 	 * @return bool $regenerate
 	 */
-	private function trait_slug_regenerate(): bool {
+	private function trait_slug_needs_regeneration(): bool {
 		/**
 		 * We believe slugs should not be regenerated. They serve a specific
 		 * purpose: provide a permanent url. Changing them could lead to dead
@@ -97,7 +97,7 @@ trait Slug {
 			throw new \Exception('Slug base cannot be empty');
 		}
 
-		if (isset($this->id) AND $this->trait_slug_regenerate() === false and !empty($this->details['slug'])) {
+		if (isset($this->id) AND $this->trait_slug_needs_regeneration() === false and !empty($this->details['slug'])) {
 			return $this->details['slug'];
 		}
 

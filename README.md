@@ -128,9 +128,9 @@ Slug creation is done in 3 steps:
 ### Check if the slug needs to be generated or regenerated
 
 - If save() is requested on a new object, slug creation will proceed
-- trait_slug_regenerate(): bool is called to check if an existing slug needs to
-be regenerated. By default trait_slug_regenerate() returns false and slug is
-never regenerated.
+- trait_slug_needs_regeneration(): bool is called to check if an existing slug
+needs to be regenerated. By default trait_sltrait_slug_needs_regeneration()
+returns false and slug isnever regenerated.
 
 ### Find a base string
 
