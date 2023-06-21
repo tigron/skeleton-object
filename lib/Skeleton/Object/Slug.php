@@ -9,8 +9,6 @@
 
 namespace Skeleton\Object;
 
-use Tigron\Skeleton\I18n\Language;
-
 trait Slug {
 
 	/**
@@ -31,6 +29,10 @@ trait Slug {
 		}
 
 		if (isset(self::$object_text_fields) AND in_array($sluggable_field, self::$object_text_fields)) {
+			if (!class_exists('\Skeleton\I18n\Object\Text')) {
+				throw new \Exception('Skeleton package "skeleton-i18n" needs to be installed to use object text');
+			}
+
 			$language_interface = \Skeleton\I18n\Config::$language_interface;
 			$base_language = $language_interface::get_base();
 			$sluggable_field = 'text_' . $base_language->name_short . '_' . $sluggable_field;

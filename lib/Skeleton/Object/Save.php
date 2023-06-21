@@ -77,18 +77,20 @@ trait Save {
 			$db->update($table, $this->details, $where);
 		}
 
-		foreach ($this->object_text_updated as $key => $value) {
-			list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
-			$language_interface = \Skeleton\I18n\Config::$language_interface;
-			$language = $language_interface::get_by_name_short($language);
-			$object_text = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language);
-			$object_text->content = $this->object_text_cache[$key];
-			$object_text->save();
+		if (class_exists('\Skeleton\I18n\Object\Text')) {
+			foreach ($this->object_text_updated as $key => $value) {
+				list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
+				$language_interface = \Skeleton\I18n\Config::$language_interface;
+				$language = $language_interface::get_by_name_short($language);
+				$object_text = \Skeleton\I18n\Object\Text::get_by_object_label_language($this, $label, $language);
+				$object_text->content = $this->object_text_cache[$key];
+				$object_text->save();
 
-			if (get_called_class()::trait_cache_enabled()) {
-				$key = \Skeleton\I18n\Object\Text::trait_get_cache_key($object_text);
-				get_called_class()::cache_delete($key);
-				get_called_class()::cache_set($key, $object_text);
+				if (get_called_class()::trait_cache_enabled()) {
+					$key = \Skeleton\I18n\Object\Text::trait_get_cache_key($object_text);
+					get_called_class()::cache_delete($key);
+					get_called_class()::cache_set($key, $object_text);
+				}
 			}
 		}
 

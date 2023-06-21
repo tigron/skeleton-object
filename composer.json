@@ -4,8 +4,10 @@
 	"type": "library",
 	"require": {
 		"php": ">=7.0.0",
-		"ext-intl": "*",
-		"tigron/skeleton-i18n": ">4.0.0"
+		"ext-intl": "*"
+	},
+	"suggest": {
+		"tigron/skeleton-i18n": "Enables object text handling"
 	},
 	"require-dev": {
 		"tigron/skeleton-database": "dev-master"
