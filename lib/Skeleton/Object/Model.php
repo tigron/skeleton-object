@@ -554,10 +554,7 @@ trait Model {
 	 * @return string $key
 	 */
 	public static function trait_get_cache_prefix() {
-		if (get_parent_class(get_called_class()) === false) {
-			throw new \Exception('No parent class available');
-		}
-		if (method_exists(get_parent_class(get_called_class()), 'cache_get')) {
+		if (get_parent_class(get_called_class()) !== false && method_exists(get_parent_class(get_called_class()), 'cache_get')) {
 			return get_parent_class(get_called_class());
 		}
 
