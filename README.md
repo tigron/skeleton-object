@@ -2,69 +2,11 @@
 
 ## Introduction
 
-Functional traits to use in objects
+This library exists of multiple traits that can be added to your class.
+Each trait will add more functionality to the class.
+To use a trait, add the following line inside you class definition:
 
-The traits specified here take into account some special configuration
-parameters that can be set within the class.
-
-### disallow_set (array)
-
-    private static $class_configuration = array (
-      'disallow_set' => array (
-        'directory',
-        'full_path',
-        'password',
-      ),
-    );
-
-Prevents the direct setting of some class variables
-
-###  database_table (string)
-
-    private static $class_configuration = [
-      'database_table' => 'my_super_special_class',
-    ];
-
-Overrides the default strtolower(get_class()) as tablename
-
-###  database_config_name (string)
-
-    private static $class_configuration = [
-      'database_config_name' => 'database_dsn',
-	];
-
-Overrides the default database when using Database::get();
-
-###  table_field_id (string)
-
-	private static $class_configuration = [
-	  'table_field_id' => 'my_strange_id',
-	];
-
-###  table_field_created (string)
-
-	private static $class_configuration = [
-	  'table_field_created' => 'my_strange_created_field',
-	];
-
-###  table_field_updated (string)
-
-	private static $class_configuration = [
-	  'table_field_updated' => 'my_strange_updated_field',
-	];
-
-###  table_field_archived (string)
-
-	private static $class_configuration = [
-	  'table_field_archived' => 'my_strange_updated_archived',
-	];
-
-###  sluggable (string)
-
-	private static $class_configuration = [
-	  'sluggable' => 'my_field_to_slug',
-	];
-
+    use \Skeleton\Object\TRAIT;
 
 ## Traits
 
@@ -219,3 +161,67 @@ should be set via cache config.
     	'port' => '11211',
     	'expire' => 600,
     ];
+
+## Class configuration
+
+The traits specified here take into account some special configuration
+parameters that can be set within the class.
+
+### disallow_set (array)
+
+    private static $class_configuration = array (
+      'disallow_set' => array (
+        'directory',
+        'full_path',
+        'password',
+      ),
+    );
+
+Prevents the direct setting of some class variables
+
+###  database_table (string)
+
+    private static $class_configuration = [
+      'database_table' => 'my_super_special_class',
+    ];
+
+Overrides the default strtolower(get_class()) as tablename
+
+###  database_config_name (string)
+
+    private static $class_configuration = [
+      'database_config_name' => 'database_dsn',
+	];
+
+Overrides the default database when using Database::get();
+
+###  table_field_id (string)
+
+	private static $class_configuration = [
+	  'table_field_id' => 'my_strange_id',
+	];
+
+###  table_field_created (string)
+
+	private static $class_configuration = [
+	  'table_field_created' => 'my_strange_created_field',
+	];
+
+###  table_field_updated (string)
+
+	private static $class_configuration = [
+	  'table_field_updated' => 'my_strange_updated_field',
+	];
+
+###  table_field_archived (string)
+
+	private static $class_configuration = [
+	  'table_field_archived' => 'my_strange_updated_archived',
+	];
+
+###  sluggable (string)
+
+	private static $class_configuration = [
+	  'sluggable' => 'my_field_to_slug',
+	];
+
