@@ -97,6 +97,31 @@ until the slug becomes unique.
 When the UUID trait is in use, the field with the name "uuid" will be
 populated with a random and unique UUIDv4.
 
+## Number trait
+
+The number trait will generate a unique number for each object. In contrast
+with the primary key (id), the number field will only be unique within a given
+set of 'number_dividers', an array of field names.
+
+For example: create a unique number per item in an invoice
+
+    Invoice X
+       Invoice_Item 1
+       Invoice_Item 2
+       Invoice_Item 3
+    Invoice Y
+       Invoice_Item 1
+       Invoice_Item 2
+       Invoice_Item 3
+
+For this example, the class_configuration needs to be defined as:
+
+    private static $class_configuration = array (
+      'number_dividers' => [ 'invoice_id' ], // A unique number is created per object with the same invoice_id
+      'number_field' => 'number', // Store the number in field 'number'
+    );
+
+
 ## Child trait
 
 Use this trait if you want to extend from a skeleton object and maybe
@@ -185,7 +210,8 @@ Prevents the direct setting of some class variables
       'database_table' => 'my_super_special_class',
     ];
 
-Overrides the default strtolower(get_class()) as tablename
+Overrides the default tablename
+default: strtolower(get_class())
 
 ###  database_config_name (string)
 
@@ -193,7 +219,8 @@ Overrides the default strtolower(get_class()) as tablename
       'database_config_name' => 'database_dsn',
 	];
 
-Overrides the default database when using Database::get();
+Overrides the default database connection
+default: Database::get();
 
 ###  table_field_id (string)
 
@@ -201,11 +228,17 @@ Overrides the default database when using Database::get();
 	  'table_field_id' => 'my_strange_id',
 	];
 
+Overrides the default primary key field
+default: 'id'
+
 ###  table_field_created (string)
 
 	private static $class_configuration = [
 	  'table_field_created' => 'my_strange_created_field',
 	];
+
+Overrides the default field to store the created timestamp
+default: 'created'
 
 ###  table_field_updated (string)
 
@@ -213,15 +246,42 @@ Overrides the default database when using Database::get();
 	  'table_field_updated' => 'my_strange_updated_field',
 	];
 
+Overrides the default field to store the last updated timestamp
+default: 'updated'
+
 ###  table_field_archived (string)
 
 	private static $class_configuration = [
 	  'table_field_archived' => 'my_strange_updated_archived',
 	];
 
+Overrides the default field to store the archived timestamp
+default: 'archived'
+
 ###  sluggable (string)
 
 	private static $class_configuration = [
 	  'sluggable' => 'my_field_to_slug',
 	];
+
+Overrides the field which is used to create the slug
+default: 'name'
+
+### number_dividers (array)
+
+	private static $class_configuration = [
+	  'number_dividers' => [ 'group1', 'group2' ],
+	];
+
+Defines the fields that group objects with a unique number together
+default: []
+
+### number_field (string)
+
+	private static $class_configuration = [
+	  'number_field' => [ 'number' ],
+	];
+
+Defines the field in which the unique number should be stored
+default: null
 
