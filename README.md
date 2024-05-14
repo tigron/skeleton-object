@@ -210,7 +210,7 @@ Prevents the direct setting of some class variables
       'database_table' => 'my_super_special_class',
     ];
 
-Overrides the default tablename
+Overrides the default tablename  
 default: strtolower(get_class())
 
 ###  database_config_name (string)
@@ -219,7 +219,7 @@ default: strtolower(get_class())
       'database_config_name' => 'database_dsn',
 	];
 
-Overrides the default database connection
+Overrides the default database connection  
 default: Database::get();
 
 ###  table_field_id (string)
@@ -228,7 +228,7 @@ default: Database::get();
 	  'table_field_id' => 'my_strange_id',
 	];
 
-Overrides the default primary key field
+Overrides the default primary key field  
 default: 'id'
 
 ###  table_field_created (string)
@@ -237,7 +237,7 @@ default: 'id'
 	  'table_field_created' => 'my_strange_created_field',
 	];
 
-Overrides the default field to store the created timestamp
+Overrides the default field to store the created timestamp  
 default: 'created'
 
 ###  table_field_updated (string)
@@ -246,7 +246,7 @@ default: 'created'
 	  'table_field_updated' => 'my_strange_updated_field',
 	];
 
-Overrides the default field to store the last updated timestamp
+Overrides the default field to store the last updated timestamp  
 default: 'updated'
 
 ###  table_field_archived (string)
@@ -255,7 +255,7 @@ default: 'updated'
 	  'table_field_archived' => 'my_strange_updated_archived',
 	];
 
-Overrides the default field to store the archived timestamp
+Overrides the default field to store the archived timestamp  
 default: 'archived'
 
 ###  sluggable (string)
@@ -264,7 +264,7 @@ default: 'archived'
 	  'sluggable' => 'my_field_to_slug',
 	];
 
-Overrides the field which is used to create the slug
+Overrides the field which is used to create the slug  
 default: 'name'
 
 ### number_dividers (array)
@@ -273,7 +273,7 @@ default: 'name'
 	  'number_dividers' => [ 'group1', 'group2' ],
 	];
 
-Defines the fields that group objects with a unique number together
+Defines the fields that group objects with a unique number together  
 default: []
 
 ### number_field (string)
@@ -282,6 +282,6 @@ default: []
 	  'number_field' => [ 'number' ],
 	];
 
-Defines the field in which the unique number should be stored
+Defines the field in which the unique number should be stored  
 default: null
 
