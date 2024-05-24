@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         name: PHP Insights checks
         steps:
-        - uses: actions/checkout@${GITHUB_REF##*/}
+        - uses: actions/checkout@${GITHUB_REF_NAME}
         - name: PHP-Insights
           uses: docker://tigron/skeleton-test-phpinsights
           with:
