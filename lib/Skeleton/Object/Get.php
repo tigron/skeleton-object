@@ -95,6 +95,12 @@ trait Get {
 			$where = ' AND ' . $field_archived . ' IS NULL';
 		}
 
+		$reflection = new \ReflectionClass(get_called_class());
+		$traits = $reflection->getTraits();
+		if (isset($traits['Skeleton\Object\Child']) === true) {
+			$where .= ' AND classname = ' . $db->quote(get_called_class());
+		}
+
 		$query = 'SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE 1=1' . $where;
 		if ($sort !== null) {
 			if ($direction === null) {
