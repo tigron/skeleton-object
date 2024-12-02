@@ -32,16 +32,11 @@ trait Delete {
 			$object_texts = \Skeleton\I18n\Object\Text::get_by_object($this);
 			foreach ($object_texts as $object_text) {
 				$object_text->delete();
-
-				if (self::trait_cache_enabled()) {
-					$key = get_called_class() . '_' . $object_text->object_id . '_' . $object_text->label . '_' . $object_text->language->name_short;
-					self::cache_delete($key);
-				}
 			}
 		}
 
 		if (self::trait_cache_enabled()) {
-			self::cache_delete(get_called_class() . '_' . $this->id);
+			self::cache_delete(get_called_class()::trait_get_cache_key($this));
 		}
 
 		$db->query('DELETE FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
