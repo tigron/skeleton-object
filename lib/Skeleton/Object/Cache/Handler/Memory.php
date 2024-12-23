@@ -79,6 +79,21 @@ class Memory implements \Skeleton\Object\Cache\HandlerInterface {
 	}
 
 	/**
+	 * Get multi from objectcache
+	 *
+	 * @access public
+	 * @param array $keys
+	 * @return mixed
+	 */
+	public static function multi_get($keys) {
+		$result = [];
+		foreach ($keys as $key) {
+			$result[] = self::get($key);
+		}
+		return $result;
+	}
+
+	/**
 	 * Put
 	 *
 	 * @access public

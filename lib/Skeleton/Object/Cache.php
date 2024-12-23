@@ -24,6 +24,18 @@ trait Cache {
 	}
 
 	/**
+	 * multi Get
+	 *
+	 * @access public
+	 * @param string $classname
+	 * @param array $keys
+	 */
+	public static function cache_multi_get($keys) {
+		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
+		return $handler::multi_get($keys);
+	}
+
+	/**
 	 * Add
 	 *
 	 * @access	public

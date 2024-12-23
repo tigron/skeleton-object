@@ -31,6 +31,19 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	}
 
 	/**
+	 * Get multi from objectcache
+	 *
+	 * @access public
+	 * @param array $keys
+	 * @return mixed
+	 */
+	public static function multi_get($keys) {
+		$memcached = self::connect();
+		$result = $memcached->getMulti($keys);
+		return $result;
+	}
+
+	/**
 	 * Put
 	 *
 	 * @access public

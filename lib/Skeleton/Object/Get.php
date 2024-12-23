@@ -35,6 +35,58 @@ trait Get {
 		return (new \ReflectionClass($this))->getShortName();
 	}
 
+
+	/**
+	 * Get by ids
+	 *
+	 * @access public
+	 * @param array $ids
+	 * @return array $obecjts
+	 */
+	public static function get_by_ids($ids) {
+		$result = [];
+
+		// Preserve the order of the ids
+		foreach ($ids as $id) {
+			$result[$id] = null;
+		}
+
+		if (get_called_class()::trait_cache_enabled()) {
+			$prefix = get_called_class()::trait_get_cache_prefix();
+			$cache_keys = [];
+			foreach ($ids as $id) {
+				$cache_keys[$id] = $prefix . '_' . $id;
+			}
+			$cached_objects = get_called_class()::cache_multi_get($cache_keys);
+
+			foreach ($cached_objects as $cached_object) {
+				unset($cache_keys[$cached_object->id]);
+			}
+
+			if (count($cache_keys) === 0) {
+				return $cached_objects;
+			}
+
+			foreach ($ids as $id) {
+				foreach ($cached_objects as $cached_object) {
+					if ($cached_object->id === $id) {
+						$result[$id] = $cached_object;
+					}
+				}
+			}
+		}
+
+		// Fill in the result with values that could not be obtained from cache
+		foreach ($result as $id => $value) {
+			if ($value !== null) {
+				continue;
+			}
+			$return[$id] = self::get_by_id($id);
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Get by id
 	 *
@@ -55,6 +107,12 @@ trait Get {
 			} catch (\Exception $e) { }
 		}
 
+		$classname = get_called_class();
+
+		/**
+		 * If in class_configuration a child_classname field is specified,
+		 * use this
+		 */
 		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
 			$table = self::trait_get_database_table();
@@ -63,8 +121,6 @@ trait Get {
 			if ($classname === null) {
 				throw new \Exception('Can not fetch ' . get_called_class() . ' with id ' . $id);
 			}
-		} else {
-			$classname = get_called_class();
 		}
 
 		$object = new $classname($id);
@@ -111,12 +167,6 @@ trait Get {
 		}
 
 		$ids = $db->get_column($query, []);
-
-		$objects = [];
-		foreach ($ids as $id) {
-			$objects[] = self::get_by_id($id);
-		}
-
-		return $objects;
+		return self::get_by_ids($ids);
 	}
 }
