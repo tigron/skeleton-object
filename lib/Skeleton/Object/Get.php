@@ -44,12 +44,8 @@ trait Get {
 	 * @return array $obecjts
 	 */
 	public static function get_by_ids($ids) {
-		$result = [];
-
 		// Preserve the order of the ids
-		foreach ($ids as $id) {
-			$result[$id] = null;
-		}
+		$result = array_fill_keys($ids, null);
 
 		if (get_called_class()::trait_cache_enabled()) {
 			$prefix = get_called_class()::trait_get_cache_prefix();
@@ -59,7 +55,11 @@ trait Get {
 			}
 			$cached_objects = get_called_class()::cache_multi_get($cache_keys);
 
+			// we use it to avoid repeatedly iterating if some cache is missing
+			$cached_objects_map = [];
+
 			foreach ($cached_objects as $cached_object) {
+				$cached_objects_map[$cached_object->id] = $cached_object;
 				unset($cache_keys[$cached_object->id]);
 			}
 
@@ -68,11 +68,10 @@ trait Get {
 			}
 
 			foreach ($ids as $id) {
-				foreach ($cached_objects as $cached_object) {
-					if ($cached_object->id === $id) {
-						$result[$id] = $cached_object;
-					}
+				if (isset($cached_objects_map[$id]) === false) {
+					continue;
 				}
+				$result[$id] = $cached_objects_map[$id];
 			}
 		}
 
@@ -81,7 +80,7 @@ trait Get {
 			if ($value !== null) {
 				continue;
 			}
-			$return[$id] = self::get_by_id($id);
+			$result[$id] = self::get_by_id($id);
 		}
 
 		return $result;
