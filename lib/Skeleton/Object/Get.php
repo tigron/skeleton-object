@@ -83,7 +83,8 @@ trait Get {
 			$result[$id] = self::get_by_id($id);
 		}
 
-		return $result;
+		// we should reset indexes in case if someone tries to get first element via 0 index
+		return array_values($result);
 	}
 
 	/**
