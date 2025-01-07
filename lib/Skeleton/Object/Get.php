@@ -64,7 +64,8 @@ trait Get {
 			}
 
 			if (count($cache_keys) === 0) {
-				return $cached_objects;
+				// we should reset indexes in case if someone tries to get first element via 0 index
+				return array_values($cached_objects);
 			}
 
 			foreach ($ids as $id) {
