@@ -39,7 +39,11 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	 */
 	public static function multi_get($keys) {
 		$memcached = self::connect();
-		$result = $memcached->getMulti($keys);
+		$result = [];
+		// set limit of keys per request for optimization
+		foreach (array_chunk($keys, 1000) as $chunk) {
+			$result = array_merge($result, $memcached->getMulti($chunk));
+		}
 		return $result;
 	}
 
