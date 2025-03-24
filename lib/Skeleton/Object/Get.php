@@ -176,7 +176,6 @@ trait Get {
 					// set child details
 					$object = $uncached_objects[$id];
 					$object->child_details = $row;
-					$object->reset_dirty_fields();
 
 					// update uncached objects with child details
 					$uncached_objects[$id] = $object;
@@ -197,6 +196,8 @@ trait Get {
 			}
 
 			$object = $uncached_objects[$id];
+			$object->reset_dirty_fields();
+
 			$result[$id] = $object;
 
 			// cache object if enabled
