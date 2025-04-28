@@ -145,7 +145,6 @@ trait Save {
 		 */
 		if (get_called_class()::trait_cache_enabled()) {
 			get_called_class()::cache_delete(get_called_class()::trait_get_cache_key($this));
-			get_called_class()::cache_set(get_called_class()::trait_get_cache_key($this), $this);
 		}
 
 	}
