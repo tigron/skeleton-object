@@ -68,9 +68,9 @@ trait Model {
 	 * @param int $id
 	 */
 	public function __construct($id = null) {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
+		if (property_exists(__CLASS__, 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
-			$this->details[$classname_field] = get_class($this);
+			$this->details[$classname_field] = __CLASS__;
 		}
 
 		if ($id !== null) {
@@ -94,7 +94,7 @@ trait Model {
 			throw new \Exception('Classname "' . $classname . '" doesn\'t exist');
 		}
 
-		if (get_class($this) == $classname) {
+		if (__CLASS__ == $classname) {
 			return $this;
 		}
 
@@ -151,7 +151,7 @@ trait Model {
 	 */
 	public function __set($key, $value) {
 		// Check if the key we want to set exists in the disallow_set variable
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['disallow_set'])) {
+		if (property_exists(__CLASS__, 'class_configuration') && isset(self::$class_configuration['disallow_set'])) {
 			if (is_array(self::$class_configuration['disallow_set'])) {
 				if (in_array($key, self::$class_configuration['disallow_set'])) {
 					throw new \Exception('Can not set ' . $key . ' directly');
@@ -441,7 +441,7 @@ trait Model {
 	 * @return Database $database
 	 */
 	protected static function trait_get_database() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['database_config_name'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['database_config_name'])) {
 			$db = Database::get(self::$class_configuration['database_config_name']);
 		} else {
 			$db = Database::get();
@@ -456,10 +456,10 @@ trait Model {
 	 * @return string $table
 	 */
 	public static function trait_get_database_table() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['database_table'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['database_table'])) {
 			return self::$class_configuration['database_table'];
 		} else {
-			return strtolower((new \ReflectionClass(get_class()))->getShortName());
+			return strtolower((new \ReflectionClass(self::class))->getShortName());
 		}
 	}
 
@@ -470,7 +470,7 @@ trait Model {
 	 * @return string $id
 	 */
 	protected static function trait_get_table_field_id() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_id'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['table_field_id'])) {
 			return self::$class_configuration['table_field_id'];
 		} else {
 			return 'id';
@@ -484,7 +484,7 @@ trait Model {
 	 * @return string $created
 	 */
 	private static function trait_get_table_field_created() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_created'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['table_field_created'])) {
 			return self::$class_configuration['table_field_created'];
 		} else {
 			return 'created';
@@ -498,7 +498,7 @@ trait Model {
 	 * @return string $updated
 	 */
 	private static function trait_get_table_field_updated() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_updated'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['table_field_updated'])) {
 			return self::$class_configuration['table_field_updated'];
 		} else {
 			return 'updated';
@@ -512,7 +512,7 @@ trait Model {
 	 * @return string $archived
 	 */
 	private static function trait_get_table_field_archived() {
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['table_field_archived'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['table_field_archived'])) {
 			return self::$class_configuration['table_field_archived'];
 		} else {
 			return 'archived';

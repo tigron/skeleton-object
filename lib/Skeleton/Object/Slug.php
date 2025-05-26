@@ -20,7 +20,7 @@ trait Slug {
 	private function trait_slug_get_base(): string {
 		$sluggable_field = 'name';
 
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['sluggable'])) {
+		if (property_exists(__CLASS__, 'class_configuration') AND isset(self::$class_configuration['sluggable'])) {
 			$sluggable_field = self::$class_configuration['sluggable'];
 		}
 

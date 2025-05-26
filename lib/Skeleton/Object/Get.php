@@ -114,7 +114,7 @@ trait Get {
 		 * If in class_configuration a child_classname field is specified,
 		 * use this
 		 */
-		if (property_exists(get_class(), 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
+		if (property_exists(self::class, 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
 			$table = self::trait_get_database_table();
 			$db = self::trait_get_database();
