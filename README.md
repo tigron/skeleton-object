@@ -215,7 +215,7 @@ Prevents the direct setting of some class variables
     ];
 
 Overrides the default tablename
-default: strtolower(get_class())
+default: strtolower(self:class)
 
 ###  database_config_name (string)
 

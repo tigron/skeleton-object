@@ -22,7 +22,7 @@ trait Number {
 		/**
 		 * We need to know the fields that divide the numbers groups of unique numbers
 		 */
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['number_dividers'])) {
+		if (property_exists(__CLASS__, 'class_configuration') AND isset(self::$class_configuration['number_dividers'])) {
 			$number_dividers = self::$class_configuration['number_dividers'];
 		}
 
@@ -36,7 +36,7 @@ trait Number {
 		/**
 		 * Which field do we need to store the number
 		 */
-		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['number_field'])) {
+		if (property_exists(__CLASS__, 'class_configuration') AND isset(self::$class_configuration['number_field'])) {
 			$number_field = self::$class_configuration['number_field'];
 		}		
 
@@ -63,7 +63,7 @@ trait Number {
 		$conditions = [];
 		foreach ($number_dividers as $number_divider) {
 			if (empty($this->$number_divider)) {
-				throw new \Exception('Cannot create number for ' . get_class() . '. Number divider ' . $number_divider . ' is empty');
+				throw new \Exception('Cannot create number for ' . __CLASS__ . '. Number divider ' . $number_divider . ' is empty');
 			}
 			$conditions[$number_divider] = $this->$number_divider;
 		}
