@@ -11,7 +11,7 @@ namespace Skeleton\Object\Cache\Handler;
 
 class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 
-	private static $memcached = null;
+	protected static $handler_object = null;
 
 	/**
 	 * Get from objectcache
@@ -21,8 +21,8 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	 * @return mixed
 	 */
 	public static function get($key) {
-		$memcached = self::connect();
-		$var = $memcached->get($key);
+		$handler_object = static::connect();
+		$var = $handler_object->get($key);
 		if ($var === false) {
 			throw new \Exception('Object not in cache');
 		} else {
@@ -48,16 +48,16 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	}
 
 	/**
-	 * Put
+	 * Set
 	 *
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
 	 */
 	public static function set($key, $value) {
-		$memcached = self::connect();
+		$handler_object = static::connect();
 		$config = \Skeleton\Object\Config::$cache_handler_config;
-		$memcached->add($key, $value, $config['expire']);
+		$handler_object->set($key, $value, $config['expire']);
 	}
 
 	/**
@@ -67,8 +67,8 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	 * @param string $key
 	 */
 	public static function delete($key) {
-		$memcached = self::connect();
-		$memcached->delete($key);
+		$handler_object = static::connect();
+		$handler_object->delete($key);
 	}
 
 	/**
@@ -77,30 +77,30 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 	 * @access public
 	 */
 	public static function flush() {
-		$memcached = self::connect();
-		$memcached->flush();
+		$handler_object = static::connect();
+		$handler_object->flush();
 	}
 
 	/**
 	 * Get the current memcached object
 	 *
 	 * @access public
-	 * @return Memcache d$memcached
+	 * @return Memcache $handler_object
 	 */
 	public static function connect() {
-		if (self::$memcached === null) {
+		if (self::$handler_object === null) {
 			$config = \Skeleton\Object\Config::$cache_handler_config;
-			self::$memcached = new \Memcached();
-			self::$memcached->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_IGBINARY);
-			self::$memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
-			self::$memcached->setOption(\Memcached::OPT_NO_BLOCK, true);
-			self::$memcached->setOption(\Memcached::OPT_TCP_NODELAY, true);
-			self::$memcached->addServers([
+			self::$handler_object = new \Memcached();
+			self::$handler_object->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_IGBINARY);
+			self::$handler_object->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+			self::$handler_object->setOption(\Memcached::OPT_NO_BLOCK, true);
+			self::$handler_object->setOption(\Memcached::OPT_TCP_NODELAY, true);
+			self::$handler_object->addServers([
 				[$config['hostname'], $config['port']]
 			]);
 		}
 
-		return self::$memcached;
+		return self::$handler_object;
 	}
 
 }

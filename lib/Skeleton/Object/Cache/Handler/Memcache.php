@@ -9,26 +9,7 @@
 
 namespace Skeleton\Object\Cache\Handler;
 
-class Memcache implements \Skeleton\Object\Cache\HandlerInterface {
-
-	private static $memcache = null;
-
-	/**
-	 * Get from objectcache
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return mixed
-	 */
-	public static function get($key) {
-		$memcache = self::connect();
-		$var = $memcache->get($key);
-		if ($var === false) {
-			throw new \Exception('Object not in cache');
-		} else {
-			return $var;
-		}
-	}
+class Memcache extends \Skeleton\Object\Cache\Handler\Memcached {
 
 	/**
 	 * Get multi from objectcache
@@ -40,7 +21,11 @@ class Memcache implements \Skeleton\Object\Cache\HandlerInterface {
 	public static function multi_get($keys) {
 		$result = [];
 		foreach ($keys as $key) {
-			$result[] = self::get($key);
+			try {
+				$result[] = self::get($key);
+			} catch (\Exception $e) {
+				continue;
+			}
 		}
 		return $result;
 	}
@@ -53,46 +38,25 @@ class Memcache implements \Skeleton\Object\Cache\HandlerInterface {
 	 * @param mixed $value
 	 */
 	public static function set($key, $value) {
-		$memcache = self::connect();
+		$handler_object = self::connect();
 		$config = \Skeleton\Object\Config::$cache_handler_config;
-		$memcache->add($key, $value, false, $config['expire']);
-	}
-
-	/**
-	 * Delete
-	 *
-	 * @access public
-	 * @param string $key
-	 */
-	public static function delete($key) {
-		$memcache = self::connect();
-		$memcache->delete($key);
-	}
-
-	/**
-	 * Flush
-	 *
-	 * @access public
-	 */
-	public static function flush() {
-		$memcache = self::connect();
-		$memcache->flush();
+		$handler_object->set($key, $value, false, $config['expire']);
 	}
 
 	/**
 	 * Get the current memcache object
 	 *
 	 * @access public
-	 * @return Memcache $memcache
+	 * @return Memcache $handler_object
 	 */
 	public static function connect() {
-		if (self::$memcache === null) {
+		if (self::$handler_object === null) {
 			$config = \Skeleton\Object\Config::$cache_handler_config;
-			self::$memcache = new \Memcache();
-			self::$memcache->connect($config['hostname'], $config['port']);
+			self::$handler_object = new \Memcache();
+			self::$handler_object->connect($config['hostname'], $config['port']);
 		}
 
-		return self::$memcache;
+		return self::$handler_object;
 	}
 
 }
