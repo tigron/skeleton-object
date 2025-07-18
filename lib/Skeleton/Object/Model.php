@@ -70,7 +70,7 @@ trait Model {
 	public function __construct($id = null) {
 		if (property_exists(__CLASS__, 'class_configuration') && isset(self::$class_configuration['child_classname_field'])) {
 			$classname_field = self::$class_configuration['child_classname_field'];
-			$this->details[$classname_field] = __CLASS__;
+			$this->details[$classname_field] = get_class($this);
 		}
 
 		if ($id !== null) {
@@ -94,7 +94,7 @@ trait Model {
 			throw new \Exception('Classname "' . $classname . '" doesn\'t exist');
 		}
 
-		if (__CLASS__ == $classname) {
+		if (get_class($this) == $classname) {
 			return $this;
 		}
 
