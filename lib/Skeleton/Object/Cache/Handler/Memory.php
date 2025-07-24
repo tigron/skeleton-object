@@ -88,7 +88,9 @@ class Memory implements \Skeleton\Object\Cache\HandlerInterface {
 	public static function multi_get($keys) {
 		$result = [];
 		foreach ($keys as $key) {
-			$result[] = self::get($key);
+			try {
+				$result[] = self::get($key);
+			} catch (\Exception $e) {}
 		}
 		return $result;
 	}
