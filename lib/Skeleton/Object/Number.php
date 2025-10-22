@@ -29,7 +29,7 @@ trait Number {
 		/**
 		 * If there are no dividers, we cannot proceed
 		 */
-		if (!is_array($number_dividers) or count($number_dividers) === 0) {
+		if (!is_array($number_dividers)) {
 			return;
 		}
 
