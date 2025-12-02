@@ -122,8 +122,12 @@ trait Model {
 	protected function get_details() {
 		$table = self::trait_get_database_table();
 
-		if (!isset($this->id) OR $this->id === null) {
+		if (!isset($this->id) || $this->id === null) {
 			throw new \Exception('Could not fetch ' . $table . ' data: id not set');
+		}
+
+		if (ctype_digit((string)$this->id) === false || $this->id < 0) {
+			throw new \Exception('Could not fetch ' . $table . ' data: invalid id ' . $this->id);
 		}
 
 		$db = self::trait_get_database();
