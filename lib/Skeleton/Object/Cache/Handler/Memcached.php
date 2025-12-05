@@ -91,6 +91,7 @@ class Memcached implements \Skeleton\Object\Cache\HandlerInterface {
 		if (self::$handler_object === null) {
 			$config = \Skeleton\Object\Config::$cache_handler_config;
 			self::$handler_object = new \Memcached();
+			self::$handler_object->setOption(\Memcached::OPT_VERIFY_KEY, true);
 			self::$handler_object->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_IGBINARY);
 			self::$handler_object->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
 			self::$handler_object->setOption(\Memcached::OPT_NO_BLOCK, true);
