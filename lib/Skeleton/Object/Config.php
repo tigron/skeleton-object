@@ -26,4 +26,12 @@ class Config {
 	 */
 	public static $cache_handler_config = [];
 
+	/**
+	 * Chunk size items per request to database
+	 *
+	 * @access public
+	 * @var int $chunk_size
+	 */
+	public static $chunk_size = 1000;
+
 }
