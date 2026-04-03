@@ -579,4 +579,19 @@ trait Model {
 	public static function trait_get_cache_key($object) {
 		return get_called_class()::trait_get_cache_prefix() . '_' . $object->id;
 	}
+
+	/**
+	 * Get object text fields names
+	 *
+	 * @access public
+	 * @return array $text_fields
+	 */
+	public static function get_object_text_fields() {
+		$text_fields = [];
+		if (isset(self::$object_text_fields) === true && empty(self::$object_text_fields) === false) {
+			$text_fields = self::$object_text_fields;
+		}
+
+		return $text_fields;
+	}
 }
