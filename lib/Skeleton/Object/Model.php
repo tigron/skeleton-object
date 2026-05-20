@@ -180,8 +180,8 @@ trait Model {
 			$value = null;
 		}
 
-		// If a new value is set, let's tag it as dirty
 		if (isset($this->dirty_fields[$key]) === false && empty($this->id) === false) {
+			// If a new value is set, let's tag it as dirty
 			if (array_key_exists($key, $this->details)) {
 				if (is_numeric($value) === true && $this->details[$key] != $value) {
 					$this->dirty_fields[$key] = $this->details[$key];
@@ -201,6 +201,9 @@ trait Model {
 					$this->dirty_fields[$key] = $this->child_details[$key];
 				}
 			}
+		} elseif (isset($this->dirty_fields[$key]) === true && $this->dirty_fields[$key] === $value) {
+			// If original value is restored, remove from dirty fields
+			unset($this->dirty_fields[$key]);
 		}
 
 		$this->details[$key] = $value;
