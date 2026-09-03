@@ -19,6 +19,10 @@ trait Cache {
 	 * @param int $id
 	 */
 	public static function cache_get($key) {
+		if (Config::$cache_handler === false) {
+			throw new \Exception('Caching not enabled');
+		}
+
 		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
 		return $handler::get($key);
 	}
@@ -31,6 +35,10 @@ trait Cache {
 	 * @param array $keys
 	 */
 	public static function cache_multi_get($keys) {
+		if (Config::$cache_handler === false) {
+			throw new \Exception('Caching not enabled');
+		}
+
 		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
 		return $handler::multi_get($keys);
 	}
@@ -42,6 +50,10 @@ trait Cache {
 	 * @param Object $object
 	 */
 	public static function cache_set($key, $object) {
+		if (Config::$cache_handler === false) {
+			throw new \Exception('Caching not enabled');
+		}
+
 		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
 		$handler::set($key, $object);
 	}
@@ -53,6 +65,10 @@ trait Cache {
 	 * @param Object $object
 	 */
 	public static function cache_delete($key) {
+		if (Config::$cache_handler === false) {
+			throw new \Exception('Caching not enabled');
+		}
+
 		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
 		$handler::delete($key);
 	}
@@ -63,6 +79,10 @@ trait Cache {
 	 * @access public
 	 */
 	public static function cache_flush() {
+		if (Config::$cache_handler === false) {
+			throw new \Exception('Caching not enabled');
+		}
+
 		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
 		$handler::flush();
 	}
