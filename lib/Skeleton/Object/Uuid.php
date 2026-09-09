@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * trait: generate_uuid
  *
@@ -10,13 +13,12 @@
 namespace Skeleton\Object;
 
 trait Uuid {
-
 	/**
 	 * Generate a uuid
 	 *
 	 * @access protected
 	 */
-	protected function generate_uuid($version = 4) {
+	protected function generate_uuid(int $version = 4): string {
 		do {
 			$hash = bin2hex(random_bytes(16));
 
@@ -45,7 +47,7 @@ trait Uuid {
 			} catch (\Exception $e) {
 				$unique = true;
 			}
-		} while ($unique = false);
+		} while ($unique === false);
 
 		return $uuid;
 	}
@@ -57,11 +59,14 @@ trait Uuid {
 	 * @param string $uuid
 	 * @return Object $object
 	 */
-	public static function get_by_uuid($uuid) {
+	public static function get_by_uuid(string $uuid) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
-		$id = $db->get_one('SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE uuid=?', [$uuid]);
+		$id = $db->get_one(
+			'SELECT ' . self::trait_get_table_field_id() . ' FROM ' . $db->quote_identifier($table) . ' WHERE uuid = ?',
+			[$uuid]
+		);
 
 		if ($id === null) {
 			throw new \Exception('Object not found');
