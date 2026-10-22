@@ -45,6 +45,14 @@ trait Save {
 		$db = self::trait_get_database();
 
 		/**
+		 * Announce the invalidation before the row is touched, so a read that is
+		 * already on its way can not store the state from before this write.
+		 */
+		if (isset($this->id) && $this->id !== null && get_called_class()::trait_cache_enabled()) {
+			get_called_class()::cache_guard_bump($this->id);
+		}
+
+		/**
 		 * Set the 'created' and 'updated' fields
 		 */
 		if (!isset($this->id) || $this->id === null) {

@@ -36,10 +36,18 @@ trait Delete {
 		}
 
 		if (self::trait_cache_enabled()) {
-			self::cache_delete(get_called_class()::trait_get_cache_key($this));
+			self::cache_guard_bump($this->id);
 		}
 
 		$db->query('DELETE FROM ' . $db->quote_identifier($table) . ' WHERE ' . self::trait_get_table_field_id() . '=?', [$this->id]);
+
+		/**
+		 * Drop the cached object only after the row is gone: a read that slips
+		 * in between would otherwise repopulate the deleted object.
+		 */
+		if (self::trait_cache_enabled()) {
+			self::cache_delete(get_called_class()::trait_get_cache_key($this));
+		}
 	}
 
 	/**

@@ -100,12 +100,23 @@ trait Get {
 			throw new \Exception('Can not fetch ' . get_called_class() . ' with id null');
 		}
 
+		$cache_guard = null;
+
 		if (get_called_class()::trait_cache_enabled()) {
 			$prefix = get_called_class()::trait_get_cache_prefix();
+
 			try {
 				$object = get_called_class()::cache_get($prefix . '_' . $id);
 				return $object;
 			} catch (\Exception $e) { }
+
+			/**
+			 * Only reached on a miss, so a cache hit keeps costing exactly one
+			 * round trip. Sample the invalidation guard before the row is read: a
+			 * write that lands while this object is being loaded has to be able to
+			 * disqualify the snapshot we are about to store.
+			 */
+			$cache_guard = get_called_class()::cache_guard_get($id);
 		}
 
 		$classname = get_called_class();
@@ -126,7 +137,16 @@ trait Get {
 
 		$object = new $classname($id);
 		if (get_called_class()::trait_cache_enabled()) {
-			get_called_class()::cache_set(get_called_class()::trait_get_cache_key($object), $object);
+			/**
+			 * Only publish the snapshot when nothing invalidated this object
+			 * while it was being read. Without this check a slow read that
+			 * finishes after a concurrent write stores the state from before
+			 * that write, and the stale object then keeps being served until
+			 * the cache entry expires.
+			 */
+			if (get_called_class()::cache_guard_get($id) === $cache_guard) {
+				get_called_class()::cache_set(get_called_class()::trait_get_cache_key($object), $object);
+			}
 		}
 
 		return $object;
