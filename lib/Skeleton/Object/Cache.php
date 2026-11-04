@@ -74,6 +74,60 @@ trait Cache {
 	}
 
 	/**
+	 * Key of the invalidation guard of an object
+	 *
+	 * The guard lives next to the cached object and is replaced on every
+	 * invalidation. It is never a cached object itself, so it can not collide
+	 * with a cache key.
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return string $key
+	 */
+	public static function cache_guard_key($id) {
+		return get_called_class()::trait_get_cache_prefix() . '_guard_' . $id;
+	}
+
+	/**
+	 * Read the invalidation guard of an object
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return mixed $guard null when the object was never invalidated
+	 */
+	public static function cache_guard_get($id) {
+		if (Config::$cache_handler === false) {
+			return null;
+		}
+
+		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
+
+		try {
+			return $handler::get(get_called_class()::cache_guard_key($id));
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Mark an object as invalidated
+	 *
+	 * Any read that started before this call is no longer allowed to publish
+	 * the snapshot it loaded: it may predate the write that is being made now.
+	 *
+	 * @access public
+	 * @param int $id
+	 */
+	public static function cache_guard_bump($id) {
+		if (Config::$cache_handler === false) {
+			return;
+		}
+
+		$handler = '\Skeleton\Object\Cache\Handler\\' . Config::$cache_handler;
+		$handler::set(get_called_class()::cache_guard_key($id), uniqid('', true));
+	}
+
+	/**
 	 * Flush
 	 *
 	 * @access public
